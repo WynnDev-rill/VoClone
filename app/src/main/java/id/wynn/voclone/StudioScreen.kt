@@ -115,8 +115,9 @@ import java.util.Locale
                             OutlinedTextField(value=vm.transcript,onValueChange={ vm.transcript=it.take(2000) },label={ Text("Ucapan persis dalam sampel") },supportingText={ Text("Periksa transkrip agar karakter suara lebih konsisten.") },minLines=2,maxLines=5,enabled=!vm.busy,modifier=Modifier.fillMaxWidth())
                             OutlinedButton(onClick={ onTask();vm.transcribe() },enabled=!vm.busy && vm.installed,modifier=Modifier.heightIn(min=48.dp)) { ButtonIcon(R.drawable.ic_subtitles);Text("Transkripsi dengan Whisper") }
                             OutlinedTextField(value=vm.voiceName,onValueChange={ vm.voiceName=it.take(60) },label={ Text("Nama suara") },singleLine=true,enabled=!vm.busy,modifier=Modifier.fillMaxWidth())
-                            Row(Modifier.fillMaxWidth().toggleable(value=consent,enabled=!vm.busy,role=Role.Checkbox,onValueChange={ consent=it }).semantics(mergeDescendants=true) { },verticalAlignment=Alignment.CenterVertically) {
+                            Row(Modifier.fillMaxWidth().heightIn(min=48.dp).toggleable(value=consent,enabled=!vm.busy,role=Role.Checkbox,onValueChange={ consent=it }).semantics(mergeDescendants=true) { },verticalAlignment=Alignment.CenterVertically) {
                                 Checkbox(checked=consent,onCheckedChange=null,enabled=!vm.busy)
+                                Spacer(Modifier.width(8.dp))
                                 Text("Saya memiliki suara ini atau izin pemiliknya.",style=MaterialTheme.typography.bodyMedium,modifier=Modifier.weight(1f))
                             }
                         }

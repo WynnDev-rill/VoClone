@@ -46,8 +46,9 @@ import kotlinx.coroutines.withContext
                 if(!vm.accepted)item {
                     Text("Bobot OmniVoice dibatasi untuk penggunaan nonkomersial; tokenizer tunduk pada lisensi Higgs Audio 2 dan Meta Llama 3. Baca ketentuan lengkap sebelum melanjutkan.",style=MaterialTheme.typography.bodyMedium)
                     TextButton(onClick={ legal=true }) { Text("Baca lisensi model & atribusi") }
-                    Row(Modifier.fillMaxWidth().toggleable(value=agreed,role=Role.Checkbox,onValueChange={ agreed=it }).semantics(mergeDescendants=true) { },verticalAlignment=Alignment.CenterVertically) {
+                    Row(Modifier.fillMaxWidth().heightIn(min=48.dp).toggleable(value=agreed,role=Role.Checkbox,onValueChange={ agreed=it }).semantics(mergeDescendants=true) { },verticalAlignment=Alignment.CenterVertically) {
                         Checkbox(checked=agreed,onCheckedChange=null)
+                        Spacer(Modifier.width(8.dp))
                         Text("Saya membaca dan menyetujui ketentuan model.",style=MaterialTheme.typography.bodyMedium,modifier=Modifier.weight(1f))
                     }
                     Button(onClick={ onTask();vm.acceptAndDownload() },enabled=agreed && !vm.busy,modifier=Modifier.fillMaxWidth().heightIn(min=52.dp)) { Text("Setujui & unduh model") }

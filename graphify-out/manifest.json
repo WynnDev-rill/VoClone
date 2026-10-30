@@ -60,15 +60,15 @@
     "semantic_hash": ""
   },
   "app/src/main/java/id/wynn/voclone/SettingsScreen.kt": {
-    "mtime": 1793378073.978473,
-    "seen": 1793380106.8654323,
-    "ast_hash": "c197952dd880d865ce18ff84e5319500",
+    "mtime": 1793382679.4827528,
+    "seen": 1793382755.5127716,
+    "ast_hash": "c360b57a737969a0717c2c596f192753",
     "semantic_hash": ""
   },
   "app/src/main/java/id/wynn/voclone/StudioScreen.kt": {
-    "mtime": 1793378073.9744263,
-    "seen": 1793380106.8654344,
-    "ast_hash": "b8df9d6fc2ab8a27d7e83aa7f39d6fcd",
+    "mtime": 1793382699.7779188,
+    "seen": 1793382755.5127726,
+    "ast_hash": "238bf93ecb49f621b637ee3f2898f811",
     "semantic_hash": ""
   },
   "app/src/main/java/id/wynn/voclone/StudioViewModel.kt": {
@@ -78,9 +78,9 @@
     "semantic_hash": ""
   },
   "app/src/main/java/id/wynn/voclone/Theme.kt": {
-    "mtime": 1793377114.0833938,
-    "seen": 1793377756.0898314,
-    "ast_hash": "4babda5e34afef70ed807ab1ce177451",
+    "mtime": 1793382678.7627819,
+    "seen": 1793382755.512775,
+    "ast_hash": "dd7a4d23e763dd5e028060d8c589abea",
     "semantic_hash": ""
   },
   "app/src/main/java/id/wynn/voclone/UpdateManifest.kt": {
@@ -366,9 +366,9 @@
     "semantic_hash": ""
   },
   ".github/workflows/android.yml": {
-    "mtime": 1793380100.8375769,
-    "seen": 1793380106.8653898,
-    "ast_hash": "15d1f624fd95fdd5efa3dfcdb50bd887",
+    "mtime": 1793382701.3138468,
+    "seen": 1793382755.5127409,
+    "ast_hash": "9fd89c4844d642dc0fafa9dc22d7ee56",
     "semantic_hash": ""
   },
   "app/src/androidTest/java/id/wynn/voclone/DeviceTest.kt": {
@@ -378,9 +378,9 @@
     "semantic_hash": ""
   },
   "app/src/androidTest/java/id/wynn/voclone/StudioUiTest.kt": {
-    "mtime": 1793376762.7503345,
-    "seen": 1793377756.0897925,
-    "ast_hash": "d5b7ed9d353db4a3bb84025fd915b6e7",
+    "mtime": 1793382700.489884,
+    "seen": 1793382755.5127566,
+    "ast_hash": "96b05e11988ef345d6213a307494f63c",
     "semantic_hash": ""
   },
   "app/src/main/java/id/wynn/voclone/AppIcon.kt": {
@@ -450,9 +450,9 @@
     "semantic_hash": ""
   },
   "docs/BUILD.md": {
-    "mtime": 1793377439.1598268,
-    "seen": 1793377756.0899394,
-    "ast_hash": "7843ea478aa40dd3aa195f2a06e2c09b",
+    "mtime": 1793382318.9527707,
+    "seen": 1793382755.5129852,
+    "ast_hash": "6065969d0cacd0808cf2045874255f41",
     "semantic_hash": ""
   },
   "docs/DEVICE_TEST.md": {
@@ -504,9 +504,9 @@
     "semantic_hash": ""
   },
   "qa/contrast.py": {
-    "mtime": 1793379042.967188,
-    "seen": 1793380106.8654816,
-    "ast_hash": "1765b566901ff87bd0fb9f01fc547e50",
+    "mtime": 1793382702.073816,
+    "seen": 1793382755.512826,
+    "ast_hash": "4ee60e89d45526e509905f118d6e9893",
     "semantic_hash": ""
   },
   "qa/evidence/host-native-results.json": {
@@ -534,9 +534,9 @@
     "semantic_hash": ""
   },
   "docs/VERIFICATION.md": {
-    "mtime": 1793381098.605478,
-    "seen": 1793381100.01338,
-    "ast_hash": "649a361416ca9ebf735cfab06fbbb451",
+    "mtime": 1793382319.968728,
+    "seen": 1793382755.512991,
+    "ast_hash": "85085ddfedc0b2bd123d731c89648947",
     "semantic_hash": ""
   },
   "qa/host/recognized-id.txt": {
@@ -573,6 +573,12 @@
     "mtime": 1793380107.2631283,
     "seen": 1793381100.0133853,
     "ast_hash": "19c2b5c5940da49cb08161e7d92d8258",
+    "semantic_hash": ""
+  },
+  "qa/evidence/ci-results.json": {
+    "mtime": 1793382321.0937412,
+    "seen": 1793382755.512829,
+    "ast_hash": "ac42c9fa68a21e460ad9a0d36f8cabb0",
     "semantic_hash": ""
   }
 }

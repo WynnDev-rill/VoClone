@@ -128,9 +128,18 @@ jobs:
             adb install -r ci-artifacts/outputs/apk/debug/app-debug.apk
             adb install -r ci-artifacts/outputs/apk/androidTest/debug/app-debug-androidTest.apk
             adb shell am instrument -w id.wynn.voclone.test/androidx.test.runner.AndroidJUnitRunner | tee qa/emulator/instrumentation.txt
-            adb pull /sdcard/Android/data/id.wynn.voclone/files/qa qa/emulator/device || true
             ! grep -E 'FAILURES!!!|INSTRUMENTATION_FAILED|Process crashed' qa/emulator/instrumentation.txt
-            grep -E 'OK \([0-9]+ tests?\)' qa/emulator/instrumentation.txt
+            grep -E 'OK \([1-9][0-9]* tests?\)' qa/emulator/instrumentation.txt
+            adb shell settings put system font_scale 1.3
+            adb shell wm size 840x2100
+            adb shell wm density 420
+            adb shell am instrument -w -e class id.wynn.voclone.StudioUiTest -e screenshotSuffix narrow-large id.wynn.voclone.test/androidx.test.runner.AndroidJUnitRunner | tee qa/emulator/narrow-large.txt
+            adb shell settings put system font_scale 1.0
+            adb shell wm size reset
+            adb shell wm density reset
+            adb pull /sdcard/Android/data/id.wynn.voclone/files/qa qa/emulator/device || true
+            ! grep -E 'FAILURES!!!|INSTRUMENTATION_FAILED|Process crashed' qa/emulator/narrow-large.txt
+            grep -E 'OK \([1-9][0-9]* tests?\)' qa/emulator/narrow-large.txt
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
