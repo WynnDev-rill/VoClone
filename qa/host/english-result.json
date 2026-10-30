@@ -1,0 +1,10 @@
+{
+  "sample_rate": 24000,
+  "channels": 1,
+  "frames": 36720,
+  "duration": 1.53,
+  "rms": 0.19591671485816106,
+  "sha256": "27b52e6062b5a3bf898053a5649615ed070042af2fccbc0b90ef128e9b3a29e0",
+  "bytes": 73484,
+  "recognized": "Hello friend!"
+}

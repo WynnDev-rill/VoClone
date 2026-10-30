@@ -1,0 +1,132 @@
+name: Android APK
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      release:
+        description: 'Build signed alpha release (requires owner signing Secrets)'
+        type: boolean
+        default: false
+permissions:
+  contents: read
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407
+      - uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a
+      - name: Install pinned Android tools
+        run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0' 'ndk;27.1.12297006' 'cmake;3.22.1'
+      - name: Validate and build ARM64 debug APK
+        run: ./gradlew --no-daemon testDebugUnitTest lintDebug assembleDebug assembleDebugAndroidTest
+      - name: Verify packaged ABI and 16 KiB alignment
+        run: python3 scripts/verify-apk.py app/build/outputs/apk/debug/app-debug.apk --debug
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: VoClone-arm64-debug
+          path: |
+            app/build/outputs/apk/debug/*.apk
+            app/build/outputs/apk/androidTest/debug/*.apk
+            app/build/reports/tests/
+            app/build/reports/lint-results-debug.*
+          if-no-files-found: error
+  release:
+    if: startsWith(github.ref, 'refs/tags/') || (github.event_name == 'workflow_dispatch' && inputs.release)
+    needs: [validate, emulator]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407
+      - uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a
+      - run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0' 'ndk;27.1.12297006' 'cmake;3.22.1'
+      - name: Build with original owner signing key
+        env:
+          KEYSTORE_BASE64: ${{ secrets.VOCLONE_KEYSTORE_BASE64 }}
+          VOCLONE_STORE_PASSWORD: ${{ secrets.VOCLONE_STORE_PASSWORD }}
+          VOCLONE_KEY_PASSWORD: ${{ secrets.VOCLONE_KEY_PASSWORD }}
+          VOCLONE_KEY_ALIAS: ${{ secrets.VOCLONE_KEY_ALIAS }}
+        run: |
+          test -n "$KEYSTORE_BASE64" || { echo 'Configure the four VOCLONE signing Secrets from the private owner backup.'; exit 1; }
+          export VOCLONE_KEYSTORE="$RUNNER_TEMP/voclone-release.p12"
+          printf '%s' "$KEYSTORE_BASE64" | base64 --decode > "$VOCLONE_KEYSTORE"
+          chmod 600 "$VOCLONE_KEYSTORE"
+          trap 'rm -f "$VOCLONE_KEYSTORE"' EXIT
+          ./gradlew --no-daemon assembleRelease
+      - name: Verify and prepare release plus corresponding source
+        run: |
+          python3 scripts/verify-apk.py app/build/outputs/apk/release/app-release.apk
+          python3 scripts/package-release.py
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: VoClone-signed-alpha
+          path: distribution/
+      - name: Publish alpha in this repository
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 scripts/publish-release.py
+  emulator:
+    needs: validate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: VoClone-arm64-debug
+          path: ci-artifacts
+      - name: Enable hardware acceleration
+        run: |
+          test -e /dev/kvm || { echo 'KVM is unavailable on this runner; no emulator result can be claimed.'; exit 1; }
+          sudo chmod 666 /dev/kvm
+      - name: Android 16 native UI, JNI and audio integration
+        uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d
+        with:
+          api-level: 36
+          target: google_apis
+          arch: x86_64
+          profile: pixel_7
+          ram-size: 4096M
+          cores: 2
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: |
+            mkdir -p qa/emulator
+            adb shell getprop ro.product.cpu.abilist | tee qa/emulator/abi.txt
+            adb install -r ci-artifacts/outputs/apk/debug/app-debug.apk
+            adb install -r ci-artifacts/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+            adb shell am instrument -w id.wynn.voclone.test/androidx.test.runner.AndroidJUnitRunner | tee qa/emulator/instrumentation.txt
+            adb pull /sdcard/Android/data/id.wynn.voclone/files/qa qa/emulator/device || true
+            ! grep -E 'FAILURES!!!|INSTRUMENTATION_FAILED|Process crashed' qa/emulator/instrumentation.txt
+            grep -E 'OK \([0-9]+ tests?\)' qa/emulator/instrumentation.txt
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: VoClone-Android16-emulator-evidence
+          path: qa/emulator/

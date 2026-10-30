@@ -1,0 +1,3 @@
+-keep class id.wynn.voclone.NativeBridge { *; }
+-keep class id.wynn.voclone.NativeControl { *; }
+-keepclasseswithmembernames class * { native <methods>; }

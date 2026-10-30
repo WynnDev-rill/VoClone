@@ -1,0 +1,56 @@
+{
+  "cancellation": {
+    "status": -5,
+    "seconds": 2.05954,
+    "samples": 0
+  },
+  "results": [
+    {
+      "language": "en",
+      "sample_rate": 24000,
+      "channels": 1,
+      "frames": 36720,
+      "duration": 1.53,
+      "rms": 0.19591671485816106,
+      "sha256": "27b52e6062b5a3bf898053a5649615ed070042af2fccbc0b90ef128e9b3a29e0",
+      "bytes": 73484,
+      "recognized": "Hello friend!",
+      "host_seconds": 661.098,
+      "speaker_similarity_verified": false,
+      "physical_device_verified": false
+    },
+    {
+      "language": "id",
+      "sample_rate": 24000,
+      "channels": 1,
+      "frames": 34320,
+      "duration": 1.43,
+      "rms": 0.12649543292180362,
+      "sha256": "7f907dd01cf5a383f03686f505bd63c3b4696dfbbe15b05f7488fb41bfe5c5a8",
+      "bytes": 68684,
+      "recognized": "Halo, dunia!",
+      "host_seconds": 654.62,
+      "speaker_similarity_verified": false,
+      "physical_device_verified": false
+    },
+    {
+      "language": "ja",
+      "sample_rate": 24000,
+      "channels": 1,
+      "frames": 41040,
+      "duration": 1.71,
+      "rms": 0.14744040619942694,
+      "sha256": "102ce9206d551b93eac872c5453081d30b4cc922a09ebcb283fbb701469f2681",
+      "bytes": 82124,
+      "recognized": "こんにちは!",
+      "host_seconds": 739.09,
+      "speaker_similarity_verified": false,
+      "physical_device_verified": false
+    }
+  ],
+  "initial_long_reference_attempt": {
+    "status": "manually terminated under CPU contention",
+    "seconds": 783.84,
+    "output": false
+  }
+}

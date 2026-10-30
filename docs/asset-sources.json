@@ -1,0 +1,26 @@
+[
+  {
+    "asset": "User icon",
+    "path": "app/src/main/res/drawable-nodpi/voclone_icon.jpg",
+    "bytes": 93519,
+    "sha256": "b60ea18c930f7e23128c7a52a458681ac4a852e24d8a0df37d050ad96cf00bc7",
+    "source": "Owner attachment 1000098214.jpg",
+    "license": "Owner-provided"
+  },
+  {
+    "asset": "User UI reference",
+    "path": "docs/reference/user-ui.jpg",
+    "bytes": 78649,
+    "sha256": "6a8f940ee8ad209adb93c333875289436aca586b34ea8e50946d4946d8dd8540",
+    "source": "Owner attachment 1000098213.jpg",
+    "license": "Owner-provided"
+  },
+  {
+    "asset": "Plus Jakarta Sans",
+    "path": "app/src/main/res/font/plus_jakarta_sans.ttf",
+    "bytes": 176288,
+    "sha256": "89b3fb38aa0d275d7a731d0d817a4f1622b316b4d7fbdedcf02ee9099ff68bc8",
+    "source": "https://github.com/google/fonts/tree/main/ofl/plusjakartasans",
+    "license": "OFL-1.1"
+  }
+]

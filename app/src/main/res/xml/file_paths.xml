@@ -1,0 +1,6 @@
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <files-path name="results" path="results/" />
+    <files-path name="voices" path="voices/" />
+    <cache-path name="exports" path="exports/" />
+    <cache-path name="updates" path="updates/" />
+</paths>

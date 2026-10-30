@@ -1,0 +1,7 @@
+# Preserve pinned third-party/installer bytes, including CRLF and historical whitespace.
+.agents/** -text -whitespace
+.codex/** -text -whitespace
+native/mp3/Lame/** -text -whitespace
+app/src/main/assets/licenses/** -text -whitespace
+graphify-out/** -whitespace
+gradlew.bat -text -whitespace

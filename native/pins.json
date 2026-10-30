@@ -1,0 +1,5 @@
+{
+ "omnivoice": {"url":"https://codeload.github.com/ServeurpersoCom/omnivoice.cpp/tar.gz/886fc079838ca7400cb2b42b36e2a65aa1daabe8","revision":"886fc079838ca7400cb2b42b36e2a65aa1daabe8","sha256":"db7898b061692c2c8a83a43bf9af64ac4419b14a8bc44584aae497fc40cbced5"},
+ "ggml": {"url":"https://codeload.github.com/ServeurpersoCom/ggml/tar.gz/f3bc6505c4e2ede83a193e0fb4695938ff3804fd","revision":"f3bc6505c4e2ede83a193e0fb4695938ff3804fd","sha256":"662bc4da4088eb5da2f26095ce9bd2bf5b74053843be369897ecc64d66b6c9df"},
+ "whisper": {"url":"https://codeload.github.com/ggml-org/whisper.cpp/tar.gz/482279b8a18855ba741d7b88c30fcb3874691f59","revision":"482279b8a18855ba741d7b88c30fcb3874691f59","sha256":"606d2bf89956a086439707314a2f36b581aef227aac911f4d9b7f1b7afcf3e5f"}
+}
