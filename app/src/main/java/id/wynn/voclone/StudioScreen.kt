@@ -94,6 +94,7 @@ import java.util.Locale
                                     AudioPlayer(vm,vm.referenceFile(),remember(vm.reference) { vm.reference?.waveform().orEmpty() },vm.reference?.duration ?: 0.0,emptyLabel="Impor atau rekam 3–30 detik")
                                     vm.reference?.let { audio ->
                                         Text(if(audio.clipped) "Sinyal clipping • rekam ulang disarankan" else "Mono 24 kHz • ${String.format(Locale.US,"%.1f",audio.duration)} detik",style=MaterialTheme.typography.bodySmall,color=if(audio.clipped)MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant)
+                                        if(audio.duration>10)Text("Referensi panjang memerlukan waktu lebih lama. Sampel bersih 3–10 detik disarankan.",style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
                                     }
                                 }
                                 if(vm.importing)LinearProgressIndicator(Modifier.fillMaxWidth())
@@ -115,6 +116,7 @@ import java.util.Locale
                             OutlinedTextField(value=vm.transcript,onValueChange={ vm.transcript=it.take(2000) },label={ Text("Ucapan persis dalam sampel") },supportingText={ Text("Periksa transkrip agar karakter suara lebih konsisten.") },minLines=2,maxLines=5,enabled=!vm.busy,modifier=Modifier.fillMaxWidth())
                             OutlinedButton(onClick={ onTask();vm.transcribe() },enabled=!vm.busy && vm.installed,modifier=Modifier.heightIn(min=48.dp)) { ButtonIcon(R.drawable.ic_subtitles);Text("Transkripsi dengan Whisper") }
                             OutlinedTextField(value=vm.voiceName,onValueChange={ vm.voiceName=it.take(60) },label={ Text("Nama suara") },singleLine=true,enabled=!vm.busy,modifier=Modifier.fillMaxWidth())
+                            Text("Clone Voice membuat pratinjau singkat. Referensi lengkap tetap digunakan.",style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
                             Row(Modifier.fillMaxWidth().heightIn(min=48.dp).toggleable(value=consent,enabled=!vm.busy,role=Role.Checkbox,onValueChange={ consent=it }).semantics(mergeDescendants=true) { },verticalAlignment=Alignment.CenterVertically) {
                                 Checkbox(checked=consent,onCheckedChange=null,enabled=!vm.busy)
                                 Spacer(Modifier.width(8.dp))
@@ -235,7 +237,7 @@ import java.util.Locale
             FilledTonalIconButton(onClick={ vm.play(vm.previewFile(voice)) },modifier=Modifier.size(48.dp)) { AppIcon(if(vm.playingPath==vm.previewFile(voice).path)R.drawable.ic_stop else R.drawable.ic_graphic_eq,"Pratinjau ${voice.name}") }
             Column(Modifier.weight(1f).padding(horizontal=12.dp)) {
                 Text(voice.name,style=MaterialTheme.typography.titleMedium)
-                Text("${formatTime(voice.duration)} • tersimpan lokal",style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("Referensi ${formatTime(voice.duration)} • lokal",style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
             }
             TextButton(onClick={ vm.select(voice.id) },enabled=!vm.busy,modifier=Modifier.heightIn(min=48.dp).semantics { selected=vm.selected==voice.id }) { Text(if(vm.selected==voice.id)"Dipilih" else "Use") }
             Box {

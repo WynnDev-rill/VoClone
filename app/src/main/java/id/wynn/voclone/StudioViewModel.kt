@@ -146,7 +146,7 @@ class StudioViewModel(application: Application): AndroidViewModel(application) {
         if(referenceId==null) { error="Impor atau rekam suara terlebih dahulu.";return }
         if(transcript.isBlank()) { error="Jalankan transkripsi atau isi ucapan persis dari sampel.";return }
         if(voiceName.isBlank()) { error="Isi nama profil suara.";return }
-        submit("clone",workDataOf("reference" to referenceId,"transcript" to transcript,"name" to voiceName,"text" to transcript.take(600),"language" to language))
+        submit("clone",cloneInput(referenceId!!,transcript,voiceName,language))
     }
     fun generate() {
         if(selected==null || text.isBlank()) { error="Pilih profil suara dan tulis teks terlebih dahulu.";return }
