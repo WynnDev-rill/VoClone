@@ -1,0 +1,153 @@
+[OmniVoice] omnivoice.cpp 886fc079838ca7400cb2b42b36e2a65aa1daabe8
+[Load] LM backend: CPU (CPU threads: 1)
+[Load] Flash attention disabled
+[GGUF] /workspace/test-models/omnivoice-base-Q4_K_M.gguf: 312 tensors, data at offset 5339136
+[LM-Load] Loaded: 28L H=1024 FFN=3072 Nh=16 Nkv=8 D=128 theta=1000000 eps=1e-06 | audio: K=8 V=1025 mask_id=1024
+[Qwen3] Attn: Q+K fused, V separate
+[Qwen3] MLP: gate+up fused
+[WeightCtx] Loaded 312 tensors, 383.5 MB into backend
+[BPE] Loaded from GGUF: 151676 vocab, 151387 merges, eos_id=151643
+[BPE] Registered 7 OmniVoice special tokens (total specials=8)
+[GGUF] /workspace/test-models/omnivoice-tokenizer-Q4_K_M.gguf: 486 tensors, data at offset 43680
+[WeightCtx] Loaded 52 tensors, 11.1 MB into backend
+[DAC] Loaded: 5 blocks, upsample 960x (8*5*4*2*3), 24 kHz mono out, weights 38.7 MB
+[DAC-Enc] Loaded: 5 blocks, downsample 960x (8*5*4*2*3), 24 kHz mono in, weights 98.0 MB
+[Sem-Enc] Loaded: 2 blocks, hidden=768, no temporal downsample, weights 28.1 MB
+[HuBERT-Feat] Loaded: 7 conv layers, cumul stride 320, weights 8.0 MB
+[HuBERT-Proj] Loaded: LN(512) + Linear(512 -> 768), weights 0.2 MB
+[HuBERT-EncInit] Loaded: pos_conv k=128 g=16 + LN(768), weights 9.0 MB
+[HuBERT-Stack] Loaded: 12 layers, hidden=768 heads=12 ffn=3072, weights 47.8 MB
+[PipelineCodec] Loaded codec: sr=24000 hop=960 backend=CPU
+[TTS] Reference: silence-trim 76800 -> 76800 samples
+[TTS] Reference: 76800 samples @ 24 kHz mono (3.20 s), aligned to 76800 (clip 0)
+[TTS] codec_encode failed on reference audio
+CANCEL status=-5 triggered=1 seconds=2.05954 samples=0
+[TTS] Reference: silence-trim 76800 -> 76800 samples
+[TTS] Reference: 76800 samples @ 24 kHz mono (3.20 s), aligned to 76800 (clip 0)
+[TTS] Reference: encoded to [K=8, T=80] codes
+[TTS-Long] Single-shot path: T=47 frames (1.88s), threshold=750 frames
+[Prompt] Built: B'=2 K=8 S=146 N1=7 N2=12 Sref=80 Stgt=47 c_len=146 u_len=47 denoise=1
+[TTS] Prompt: B'=2 K=8 S=146 c_len=146 u_len=47
+[MaskGIT] Start: T=47 K=8 S=146 num_step=32 guidance=2.00 t_shift=0.100 layer_pen=5.00 cls_t=0.00 pos_t=5.00
+[MaskGIT-Step] 1/32 demask=2 remaining=374
+[MaskGIT-Step] 2/32 demask=2 remaining=372
+[MaskGIT-Step] 3/32 demask=2 remaining=370
+[MaskGIT-Step] 4/32 demask=2 remaining=368
+[MaskGIT-Step] 5/32 demask=2 remaining=366
+[MaskGIT-Step] 6/32 demask=2 remaining=364
+[MaskGIT-Step] 7/32 demask=2 remaining=362
+[MaskGIT-Step] 8/32 demask=2 remaining=360
+[MaskGIT-Step] 9/32 demask=3 remaining=357
+[MaskGIT-Step] 10/32 demask=3 remaining=354
+[MaskGIT-Step] 11/32 demask=3 remaining=351
+[MaskGIT-Step] 12/32 demask=3 remaining=348
+[MaskGIT-Step] 13/32 demask=3 remaining=345
+[MaskGIT-Step] 14/32 demask=4 remaining=341
+[MaskGIT-Step] 15/32 demask=4 remaining=337
+[MaskGIT-Step] 16/32 demask=4 remaining=333
+[MaskGIT-Step] 17/32 demask=5 remaining=328
+[MaskGIT-Step] 18/32 demask=5 remaining=323
+[MaskGIT-Step] 19/32 demask=6 remaining=317
+[MaskGIT-Step] 20/32 demask=6 remaining=311
+[MaskGIT-Step] 21/32 demask=7 remaining=304
+[MaskGIT-Step] 22/32 demask=8 remaining=296
+[MaskGIT-Step] 23/32 demask=9 remaining=287
+[MaskGIT-Step] 24/32 demask=11 remaining=276
+[MaskGIT-Step] 25/32 demask=13 remaining=263
+[MaskGIT-Step] 26/32 demask=15 remaining=248
+[MaskGIT-Step] 27/32 demask=19 remaining=229
+[MaskGIT-Step] 28/32 demask=23 remaining=206
+[MaskGIT-Step] 29/32 demask=30 remaining=176
+[MaskGIT-Step] 30/32 demask=41 remaining=135
+[MaskGIT-Step] 31/32 demask=59 remaining=76
+[MaskGIT-Step] 32/32 demask=76 remaining=0
+[MaskGIT] Total LM forward: 645275.06 ms across 32 steps (avg 20164.85 ms/step)
+[TTS] Decode: K=8 T=47 expected_samples=45120
+[TTS-Long] Post-proc: 45120 -> 36720 samples (1.53s at 24000 Hz, ref_rms=0.1747)
+SYNTH language=en seconds=661.098 frames=36720
+[TTS] Reference: silence-trim 76800 -> 76800 samples
+[TTS] Reference: 76800 samples @ 24 kHz mono (3.20 s), aligned to 76800 (clip 0)
+[TTS] Reference: encoded to [K=8, T=80] codes
+[TTS-Long] Single-shot path: T=44 frames (1.76s), threshold=750 frames
+[Prompt] Built: B'=2 K=8 S=144 N1=7 N2=13 Sref=80 Stgt=44 c_len=144 u_len=44 denoise=1
+[TTS] Prompt: B'=2 K=8 S=144 c_len=144 u_len=44
+[MaskGIT] Start: T=44 K=8 S=144 num_step=32 guidance=2.00 t_shift=0.100 layer_pen=5.00 cls_t=0.00 pos_t=5.00
+[MaskGIT-Step] 1/32 demask=2 remaining=350
+[MaskGIT-Step] 2/32 demask=2 remaining=348
+[MaskGIT-Step] 3/32 demask=2 remaining=346
+[MaskGIT-Step] 4/32 demask=2 remaining=344
+[MaskGIT-Step] 5/32 demask=2 remaining=342
+[MaskGIT-Step] 6/32 demask=2 remaining=340
+[MaskGIT-Step] 7/32 demask=2 remaining=338
+[MaskGIT-Step] 8/32 demask=2 remaining=336
+[MaskGIT-Step] 9/32 demask=2 remaining=334
+[MaskGIT-Step] 10/32 demask=3 remaining=331
+[MaskGIT-Step] 11/32 demask=3 remaining=328
+[MaskGIT-Step] 12/32 demask=3 remaining=325
+[MaskGIT-Step] 13/32 demask=3 remaining=322
+[MaskGIT-Step] 14/32 demask=3 remaining=319
+[MaskGIT-Step] 15/32 demask=4 remaining=315
+[MaskGIT-Step] 16/32 demask=4 remaining=311
+[MaskGIT-Step] 17/32 demask=4 remaining=307
+[MaskGIT-Step] 18/32 demask=5 remaining=302
+[MaskGIT-Step] 19/32 demask=5 remaining=297
+[MaskGIT-Step] 20/32 demask=6 remaining=291
+[MaskGIT-Step] 21/32 demask=7 remaining=284
+[MaskGIT-Step] 22/32 demask=8 remaining=276
+[MaskGIT-Step] 23/32 demask=9 remaining=267
+[MaskGIT-Step] 24/32 demask=10 remaining=257
+[MaskGIT-Step] 25/32 demask=12 remaining=245
+[MaskGIT-Step] 26/32 demask=14 remaining=231
+[MaskGIT-Step] 27/32 demask=18 remaining=213
+[MaskGIT-Step] 28/32 demask=22 remaining=191
+[MaskGIT-Step] 29/32 demask=29 remaining=162
+[MaskGIT-Step] 30/32 demask=39 remaining=123
+[MaskGIT-Step] 31/32 demask=55 remaining=68
+[MaskGIT-Step] 32/32 demask=68 remaining=0
+[MaskGIT] Total LM forward: 644245.06 ms across 32 steps (avg 20132.66 ms/step)
+[TTS] Decode: K=8 T=44 expected_samples=42240
+[TTS-Long] Post-proc: 42240 -> 34320 samples (1.43s at 24000 Hz, ref_rms=0.1747)
+SYNTH language=id seconds=654.62 frames=34320
+[TTS] Reference: silence-trim 76800 -> 76800 samples
+[TTS] Reference: 76800 samples @ 24 kHz mono (3.20 s), aligned to 76800 (clip 0)
+[TTS] Reference: encoded to [K=8, T=80] codes
+[TTS-Long] Single-shot path: T=46 frames (1.84s), threshold=750 frames
+[Prompt] Built: B'=2 K=8 S=144 N1=7 N2=11 Sref=80 Stgt=46 c_len=144 u_len=46 denoise=1
+[TTS] Prompt: B'=2 K=8 S=144 c_len=144 u_len=46
+[MaskGIT] Start: T=46 K=8 S=144 num_step=32 guidance=2.00 t_shift=0.100 layer_pen=5.00 cls_t=0.00 pos_t=5.00
+[MaskGIT-Step] 1/32 demask=2 remaining=366
+[MaskGIT-Step] 2/32 demask=2 remaining=364
+[MaskGIT-Step] 3/32 demask=2 remaining=362
+[MaskGIT-Step] 4/32 demask=2 remaining=360
+[MaskGIT-Step] 5/32 demask=2 remaining=358
+[MaskGIT-Step] 6/32 demask=2 remaining=356
+[MaskGIT-Step] 7/32 demask=2 remaining=354
+[MaskGIT-Step] 8/32 demask=2 remaining=352
+[MaskGIT-Step] 9/32 demask=2 remaining=350
+[MaskGIT-Step] 10/32 demask=3 remaining=347
+[MaskGIT-Step] 11/32 demask=3 remaining=344
+[MaskGIT-Step] 12/32 demask=3 remaining=341
+[MaskGIT-Step] 13/32 demask=3 remaining=338
+[MaskGIT-Step] 14/32 demask=3 remaining=335
+[MaskGIT-Step] 15/32 demask=4 remaining=331
+[MaskGIT-Step] 16/32 demask=4 remaining=327
+[MaskGIT-Step] 17/32 demask=5 remaining=322
+[MaskGIT-Step] 18/32 demask=5 remaining=317
+[MaskGIT-Step] 19/32 demask=6 remaining=311
+[MaskGIT-Step] 20/32 demask=6 remaining=305
+[MaskGIT-Step] 21/32 demask=7 remaining=298
+[MaskGIT-Step] 22/32 demask=8 remaining=290
+[MaskGIT-Step] 23/32 demask=9 remaining=281
+[MaskGIT-Step] 24/32 demask=11 remaining=270
+[MaskGIT-Step] 25/32 demask=12 remaining=258
+[MaskGIT-Step] 26/32 demask=15 remaining=243
+[MaskGIT-Step] 27/32 demask=18 remaining=225
+[MaskGIT-Step] 28/32 demask=23 remaining=202
+[MaskGIT-Step] 29/32 demask=30 remaining=172
+[MaskGIT-Step] 30/32 demask=40 remaining=132
+[MaskGIT-Step] 31/32 demask=58 remaining=74
+[MaskGIT-Step] 32/32 demask=74 remaining=0
+[MaskGIT] Total LM forward: 717186.87 ms across 32 steps (avg 22412.09 ms/step)
+[TTS] Decode: K=8 T=46 expected_samples=44160
+[TTS-Long] Post-proc: 44160 -> 41040 samples (1.71s at 24000 Hz, ref_rms=0.1747)
+SYNTH language=ja seconds=739.09 frames=41040

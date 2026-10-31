@@ -1,0 +1,10 @@
+
+id.wynn.voclone.DeviceTest:
+id.wynn.voclone.DeviceTest:..
+id.wynn.voclone.StudioUiTest:.
+
+Time: 41.12
+
+OK (4 tests)
+
+

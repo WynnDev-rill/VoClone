@@ -5,3 +5,5 @@ native/mp3/Lame/** -text -whitespace
 app/src/main/assets/licenses/** -text -whitespace
 graphify-out/** -whitespace
 gradlew.bat -text -whitespace
+# Preserve exact instrumentation output, including Android runner's trailing blank lines.
+qa/evidence/android16/*.txt -text -whitespace

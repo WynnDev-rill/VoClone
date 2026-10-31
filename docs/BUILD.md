@@ -35,8 +35,12 @@ Never regenerate the key. Public certificate: docs/signing-sha256.txt. Package `
 
 The connected integration returned **403 Resource not accessible by integration** for the Secrets public-key endpoint in this session. No Secrets installation is claimed. Local owner signing works independently. Secrets are written to runner temp only and deleted after build. Source/archive scripts must never include keystore or credentials.
 
+The private backup includes `install-github-secrets.py`. After extracting it and authenticating GitHub CLI as an owner with Secrets permission, run `python3 install-github-secrets.py --repo WynnDev-rill/VoClone`. It sends the four values through stdin without printing them. The downloadable backup was independently restored in memory: its RSA4096 private key matches its certificate and the APK owner fingerprint.
+
 `python3 scripts/package-release.py` prepares owner APK, SHA, update manifest and complete source archive after a verified signed build and committed HEAD. `scripts/publish-release.py` creates an alpha prerelease in the source repo. Stable release is deliberately not automated before physical-device gates. Public Wynn-Store updater publication is a separate owner-approved distribution step: copy the generated alpha.json only after its exact APK and matching source have been published, without exposing a private-source GitHub token.
 
 ## Environment-specific failures seen
 
 Initial environment had JRE without javac, and Java did not use the session HTTP proxy automatically. A separate JDK21 and system CA trust store were used, with JVM HTTP/HTTPS proxy properties supplied only to local commands. Do not commit those machine paths/proxy credentials. Native source checksums and TLS verification were never disabled.
+
+The first Actions run failed before compilation because setup-android's default requested the removed SDK package `tools`. The workflow now explicitly installs only `platform-tools`, followed by the pinned SDK/NDK/CMake packages. The subsequent CI build, 34 JVM tests, lint and APK alignment verification passed; see docs/VERIFICATION.md for emulator status and artifact links.

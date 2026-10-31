@@ -1,0 +1,53 @@
+{
+  "run_id": 41107870881,
+  "source_commit": "ef605ddad91299383ad56181e7b712fab79ab2e3",
+  "run_attempt": 2,
+  "status": "success",
+  "url": "https://github.com/WynnDev-rill/VoClone/actions/runs/41107870881",
+  "build_seconds": 274,
+  "jvm": {
+    "tests": 34,
+    "failed": 0,
+    "ignored": 0,
+    "seconds": 2.67
+  },
+  "lint": {
+    "errors": 0,
+    "warnings": 35
+  },
+  "debug_apk": {
+    "artifact_id": 13001862231,
+    "bytes": 33400995,
+    "sha256": "c1aced1da68a8118c9b58609a6a5624d9b5d17d3c1904a8b9c3842f341d6b407",
+    "arm64_only": true,
+    "zip_and_elf_alignment_16kib": true
+  },
+  "android16": {
+    "job_id": 124374017604,
+    "artifact_id": 13021102820,
+    "abi": "x86_64,arm64-v8a",
+    "arm64_translation": true,
+    "default": {
+      "reported_tests": 4,
+      "executed": 3,
+      "full_inference_assumption_skipped": 1,
+      "seconds": 41.12
+    },
+    "narrow_large": {
+      "tests": 1,
+      "passed": 1,
+      "width_dp": 320,
+      "font_scale": 1.3,
+      "seconds": 21.783
+    },
+    "screenshots": 10
+  },
+  "failed_attempt1": {
+    "job_id": 124245064010,
+    "error": "INSTRUMENTATION_ABORTED: System has crashed",
+    "specific_cause_verified": false,
+    "evidence": "ci-emulator-system-crash-attempt1.zip"
+  },
+  "signed_release_actions": "not run; owner Secrets not configured (integration403)",
+  "prior_pre_polish_run": 41099863307
+}

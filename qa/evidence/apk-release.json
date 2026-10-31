@@ -3,7 +3,7 @@
   "versionName": "0.1.0-alpha",
   "versionCode": 1,
   "bytes": 7112183,
-  "sha256": "6e8b56c76c1ba6ce824f7feeb703d9216faec68c62ef38dc1809b6238d7aca67",
+  "sha256": "ab46b56234467c07c596518f5a386f52eb1dcab2a1771f0dff8ec8dd64853447",
   "signerSha256": "90dfa90fef1c77d3533577f75888c4fd9cb93a66095ba445d70e4b0d7adde64f",
   "abi": "arm64-v8a",
   "zipAlignment": 16384,

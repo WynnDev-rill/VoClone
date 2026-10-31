@@ -1,0 +1,8 @@
+
+id.wynn.voclone.StudioUiTest:.
+
+Time: 21.783
+
+OK (1 test)
+
+
