@@ -37,6 +37,12 @@ Run awal 41098645338 gagal sebelum build karena paket SDK `tools` yang sudah dih
 
 Package id.wynn.voclone, minSdk29, targetSdk36, ARM64, versionCode1 / 0.1.0-alpha. APK owner final **7112183 byte (6.78 MiB)**, SHA-256 `ab46b56234467c07c596518f5a386f52eb1dcab2a1771f0dff8ec8dd64853447`. Metadata lengkap: qa/evidence/apk-release.json. Public signer di docs/signing-sha256.txt; private key hanya backup owner. Model tidak dibundel.
 
+## Distribusi alpha yang tersedia
+
+[Release v0.1.0-alpha](https://github.com/WynnDev-rill/VoClone/releases/tag/v0.1.0-alpha), source commit a06b3005bbc80ee86e248b9a48c5924d372d11e4. [Actions publikasi41148356729](https://github.com/WynnDev-rill/VoClone/actions/runs/41148356729) sukses setelah verifier memeriksa ulang APK owner/hash/signer/ARM64/alignment16KiB. [Artifact owner APK](https://github.com/WynnDev-rill/VoClone/actions/runs/41148356729/artifacts/13022330442). APK7112183 byte; corresponding source di Release31248825 byte. Arsip source lokal dapat berbeda byte gzip/timestamp, bukan klaim reproduksi byte-identik.
+
+APK owner ditandatangani lokal, kemudian diunggah oleh Actions; private key tidak masuk repo maupun job tersebut. Direct upload cloud401 ditangani dengan transport sementara yang dijelaskan di BUILD.md. Source repo dan Release tetap privat; belum ada publikasi pada Wynn-Store.
+
 ## Belum terbukti / batasan
 
 - Belum ada POCO F6/Android16 fisik: kualitas identitas/timbre/intonasi, bahasa panjang dan multi-speaker/noisy samples, peak RAM, kebocoran memori, suhu, baterai, accelerators, latency dan stabilitas panjang belum dibuktikan. ASR benar pada satu frasa bukan penilaian kualitas lengkap atau jaminan multilingual.
