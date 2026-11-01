@@ -30,6 +30,11 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
+      - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407
+        with:
+          packages: platform-tools
+          log-accepted-android-sdk-licenses: false
+      - run: sdkmanager 'build-tools;36.0.0'
       - name: Select immutable source and verify APK identity
         env:
           SOURCE_COMMIT: ${{ inputs.source_commit }}
@@ -43,10 +48,14 @@ jobs:
           echo '614281cfe9e226b4d9eb5d97afd92eb31ae681fafff83ffd94cdf1a9eb916f32  '"$RUNNER_TEMP/owner-v2.apk" | sha256sum -c -
           gh release download v0.1.0-alpha --repo WynnDev-rill/VoClone --pattern 'VoClone-0.1.0-alpha-arm64.apk' --dir "$RUNNER_TEMP"
           echo 'ab46b56234467c07c596518f5a386f52eb1dcab2a1771f0dff8ec8dd64853447  '"$RUNNER_TEMP/VoClone-0.1.0-alpha-arm64.apk" | sha256sum -c -
-          signer_tool="$(find "$ANDROID_HOME/build-tools" -name apksigner | sort -V | tail -1)"
-          for apk in "$RUNNER_TEMP/owner-v2.apk" "$RUNNER_TEMP/VoClone-0.1.0-alpha-arm64.apk"; do
-            "$signer_tool" verify --verbose --print-certs "$apk" | grep -q 'Signer #1 certificate SHA-256 digest: 90dfa90fef1c77d3533577f75888c4fd9cb93a66095ba445d70e4b0d7adde64f'
-          done
+          python3 - <<'PY'
+          import os,pathlib,re,subprocess
+          signer=pathlib.Path(os.environ['ANDROID_HOME'])/'build-tools/36.0.0/apksigner'
+          for name in ('owner-v2.apk','VoClone-0.1.0-alpha-arm64.apk'):
+              output=subprocess.check_output([str(signer),'verify','--verbose','--print-certs',str(pathlib.Path(os.environ['RUNNER_TEMP'])/name)],text=True)
+              print(name,output)
+              assert re.search(r'Signer #1 certificate SHA-256 digest: ([a-f0-9]+)',output).group(1)==pathlib.Path('docs/signing-sha256.txt').read_text().strip()
+          PY
       - run: test -e /dev/kvm && sudo chmod 666 /dev/kvm
       - name: Rehearse actual same-owner APK upgrade and preserved UI profile
         uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d
