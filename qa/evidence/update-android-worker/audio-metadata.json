@@ -1,0 +1,18 @@
+[
+  {
+    "file": "worker-preview.wav",
+    "bytes": 95608,
+    "sha256": "d6a9c0192a56b89719b28b10b1f355609a6018ce96cdcc149a44d33de5110783",
+    "rate": 24000,
+    "duration": 1.99,
+    "rms": 0.14093649125592925
+  },
+  {
+    "file": "worker-generated.wav",
+    "bytes": 67768,
+    "sha256": "86b319753243de466c5e7a8715682b67f914e772690fd7bd8c39d4f2d57e5230",
+    "rate": 24000,
+    "duration": 1.41,
+    "rms": 0.11584173980826641
+  }
+]

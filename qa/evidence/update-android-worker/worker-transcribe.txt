@@ -1,0 +1,3 @@
+state=SUCCEEDED
+realSamplerProgressObserved=false
+homePressed=false

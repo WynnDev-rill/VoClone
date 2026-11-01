@@ -16,6 +16,8 @@ These steps are an unexecuted hardware checklist unless VERIFICATION.md explicit
 
 ## Instrumentation commands
 
+Use a disposable debug emulator/spare test device. Debug signer differs from the owner release: never uninstall the owner app/clear private voices to make these commands work, and never publish an owner-signed instrumentation APK. Test the owner installation on POCO through the UI checklist; the rooted upgrade script is only for disposable emulator shells and adds no root permission to the APK.
+
 ```sh
 ./gradlew assembleDebug assembleDebugAndroidTest
 adb install -r app/build/outputs/apk/debug/app-debug.apk
@@ -27,3 +29,14 @@ adb pull /sdcard/Android/data/id.wynn.voclone/files/qa ./qa/device-evidence
 ```
 
 Default suite checks JNI dependency loading and real WAV/MP3 decoding, plus Compose launch/settings screenshots. The expensive offline test is explicitly skipped until fullInference is enabled; it creates its own temporary QA profile and deletes only that profile. It performs real Whisper -> Omni preview -> persisted profile -> different text -> valid WAV. The codec sine fixture is not a cloned voice and is never packaged in the production app. Keep actual logs and device/build identifiers alongside WAV hashes; redact personal voice/transcript data before sharing logs publicly.
+
+
+## Update 0.2 regression cases
+
+Install the v0.2 owner APK over v0.1 once (do not uninstall); v0.1's old Wynn-Store feed cannot discover the new VoClone destination. Capture package/cert, voices, model acceptance and file hashes before/after. v0.2 checks its own public feed when opened (12-hour cooldown; new build/feed gets one immediate check); test disabled-auto and manual check too. A future higher version must pass installer consent; no silent install claim.
+
+Compare the same clean permitted reference at3–10seconds and16seconds. Record stage timings and CPU backend from the explicit Settings diagnostic export, plus total wall time, output duration and peak/thermal samples. Clone preview now has a short target; target duration should not repeat the entire reference. Do not compare unrelated text/reference/thermal conditions as a speed benchmark. Keep default32 iterations. Verify intelligibility and speaker identity by listening with the owner's permission.
+
+Paste more than600characters, including Japanese, emoji, a long unbroken word and whitespace. Verify all content survives chunking; real text-part i/N and native iteration percentage are separate. Inspect transitions between parts; export WAV and MP3 and decode externally. Cancel during text preparation, reference encoding, synthesis and export; no partial success. On process death/system retry, SHA-verified completed parts of the same worker can be reused. Disk-full failure must reclaim terminal data. RIFF4GiB, available storage and Android service quotas are real limits.
+
+The optional CI `full_inference=true` Worker test accepts the documented model terms explicitly for noncommercial QA via the instrumentation-only argument `acceptModelTerms=true`; it downloads and verifies models before airplane mode and actual Workers. It restores prior connectivity and cleans only its own requests/profile/reference in finally. Normal UI fixture tests and codec sine-wave tests do not claim AI synthesis.
