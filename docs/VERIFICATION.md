@@ -1,3 +1,13 @@
+# Update 0.2.0-alpha — 1 November 2026
+
+Current update details and limits: [UPDATE_0.2.md](UPDATE_0.2.md). Source versionCode2; original signer retained; distribution/update feed moved entirely to this now-public VoClone repository. No Wynn-Store publication. v0.1 requires one manual same-signer upgrade.
+
+Already verified for this update: 55 JVM tests passed, actual patched host AI produced a new valid non-silent 24k mono WAV with reference/32 native iterations/decode callbacks, and actual native cancellation passed. Evidence: `qa/evidence/update-host-progress.json` and `.txt`. The 256.466-second host run includes load/cancel and concurrent Android build; it is not a POCO benchmark. The 240-second streaming WAV test and real LAME five-hour **frame-count initialization** test passed; neither claims five hours of AI output. First lint failure (getStopReason requires API31) was fixed with a guard for min29. Final APK/CI/emulator results will be appended when available.
+
+Two read-only reviews found no remaining Critical/Important production/security issue after fixes to storage reclamation, queued-task cancellation, whitespace scans, and cancellation during cached-part validation. New real-Worker instrumentation cleanup was corrected to restore connectivity and cancel only its own requests. Build success, UI fixture tests, actual host AI, emulator AI and physical phone tests are separate evidence categories.
+
+The report below is retained as **v0.1 historical evidence**, not a claim that v0.2 has already passed those checks.
+
 # Verifikasi VoClone — 30 Oktober 2026
 
 Status: alpha, bukan sertifikasi perangkat fisik. Build lokal snapshot akhir berhasil; status CI/emulator dicatat terpisah setelah workflow dijalankan. Tidak ada mock AI dalam jalur produksi.

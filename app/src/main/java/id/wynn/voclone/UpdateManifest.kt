@@ -36,9 +36,8 @@ data class UpdateManifest(
         const val MAX_APK_SIZE = 200L * 1024 * 1024
         fun trustedAsset(url: String): Boolean = runCatching {
             val uri = URI(url)
-            val release = uri.host == "github.com" && uri.rawPath.startsWith("/WynnDev-rill/Wynn-Store/releases/download/voclone-")
-            val bootstrap = uri.host == "raw.githubusercontent.com" && uri.rawPath.matches(Regex("/WynnDev-rill/Wynn-Store/main/voclone/distribution/VoClone-[0-9]+\\.[0-9]+\\.[0-9]+\\.apk"))
-            uri.scheme == "https" && uri.port == -1 && uri.userInfo == null && (release || bootstrap) &&
+            val release = uri.host == "github.com" && uri.rawPath.matches(Regex("/WynnDev-rill/VoClone/releases/download/v[0-9]+\\.[0-9]+\\.[0-9]+(?:-[A-Za-z0-9.-]+)?/VoClone-[A-Za-z0-9._-]+\\.apk"))
+            uri.scheme == "https" && uri.port == -1 && uri.userInfo == null && release &&
                 !uri.rawPath.contains("..") && uri.fragment == null && uri.query == null
         }.getOrDefault(false)
     }

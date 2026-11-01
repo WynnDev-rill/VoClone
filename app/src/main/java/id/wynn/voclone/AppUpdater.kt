@@ -33,11 +33,14 @@ class AppUpdater(private val context: Context) {
     private val folder get() = File(context.cacheDir, "updates").apply { mkdirs() }
     private val apk get() = File(folder, "update.apk")
     fun automatic(enabled: Boolean) { prefs.edit().putBoolean("automatic", enabled).apply(); automatic.value = enabled }
+    fun automaticDue(now: Long=System.currentTimeMillis()): Boolean = automatic.value &&
+        (prefs.getInt("checkedBuild",0)!=BuildConfig.VERSION_CODE || prefs.getString("checkedFeed",null)!=BuildConfig.UPDATE_URL ||
+            now<state.value.lastChecked || now-state.value.lastChecked>12*60*60*1000L)
     suspend fun check() {
         if (!mutex.tryLock()) return
         try {
             val checkedAt=System.currentTimeMillis()
-            prefs.edit().putLong("lastChecked",checkedAt).apply()
+            prefs.edit().putLong("lastChecked",checkedAt).putInt("checkedBuild",BuildConfig.VERSION_CODE).putString("checkedFeed",BuildConfig.UPDATE_URL).apply()
             state.value=state.value.copy(lastChecked=checkedAt)
             state.value = state.value.copy(checking = true, error = false, message = "Memeriksa versi terbaru…")
             val next = withContext(Dispatchers.IO) {

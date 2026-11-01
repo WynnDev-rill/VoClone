@@ -1,14 +1,14 @@
 {
   "app/build.gradle.kts": {
-    "mtime": 1793376977.0819006,
-    "seen": 1793377756.089785,
-    "ast_hash": "0be4a76583d7d9931fae1c7bf758c670",
+    "mtime": 1793541018.6808069,
+    "seen": 1793542075.386522,
+    "ast_hash": "f7cd889d7bc34c5b9aa9e5c6f063dd6c",
     "semantic_hash": ""
   },
   "app/src/main/java/id/wynn/voclone/AndroidAudio.kt": {
-    "mtime": 1793376010.9151766,
-    "seen": 1793376049.717209,
-    "ast_hash": "6d10d1c297ccd6ddde2c0e0b8accf756",
+    "mtime": 1793541480.869785,
+    "seen": 1793542075.3865366,
+    "ast_hash": "a58ca851f1bd9cd88fc63dc48d2989e8",
     "semantic_hash": ""
   },
   "app/src/main/java/id/wynn/voclone/ApkTransfer.kt": {
@@ -18,9 +18,9 @@
     "semantic_hash": ""
   },
   "app/src/main/java/id/wynn/voclone/AppUpdater.kt": {
-    "mtime": 1793376010.9166412,
-    "seen": 1793376049.7172112,
-    "ast_hash": "a95d6253649c37eaee76ba51c1628421",
+    "mtime": 1793541480.8702254,
+    "seen": 1793542075.3865435,
+    "ast_hash": "17f3b7b1ec473f03d77c8365c9490a4a",
     "semantic_hash": ""
   },
   "app/src/main/java/id/wynn/voclone/Audio.kt": {
@@ -30,15 +30,15 @@
     "semantic_hash": ""
   },
   "app/src/main/java/id/wynn/voclone/CloneWorker.kt": {
-    "mtime": 1793380100.8372865,
-    "seen": 1793380106.8654234,
-    "ast_hash": "797f0c3de71c6ab6c527ceff7a13e816",
+    "mtime": 1793541896.4370012,
+    "seen": 1793542075.386547,
+    "ast_hash": "3e600e6371a5368bca0b4f8767fc03fd",
     "semantic_hash": ""
   },
   "app/src/main/java/id/wynn/voclone/Engine.kt": {
-    "mtime": 1793376010.917144,
-    "seen": 1793376049.7172139,
-    "ast_hash": "25832eeb0fb01411075b4e2d62128f49",
+    "mtime": 1793428824.4433148,
+    "seen": 1793542075.3865514,
+    "ast_hash": "3d25f895fda5ab6040e12ecbe09eddbe",
     "semantic_hash": ""
   },
   "app/src/main/java/id/wynn/voclone/MainActivity.kt": {
@@ -48,9 +48,9 @@
     "semantic_hash": ""
   },
   "app/src/main/java/id/wynn/voclone/Models.kt": {
-    "mtime": 1793379881.1607008,
-    "seen": 1793380106.8654284,
-    "ast_hash": "1ba6f48c92c22ef284547668c4af08b6",
+    "mtime": 1793541896.437348,
+    "seen": 1793542075.3865561,
+    "ast_hash": "6f535f9f30b47d962b0121a7b07f5c90",
     "semantic_hash": ""
   },
   "app/src/main/java/id/wynn/voclone/Profiles.kt": {
@@ -60,21 +60,21 @@
     "semantic_hash": ""
   },
   "app/src/main/java/id/wynn/voclone/SettingsScreen.kt": {
-    "mtime": 1793382679.4827528,
-    "seen": 1793382755.5127716,
-    "ast_hash": "c360b57a737969a0717c2c596f192753",
+    "mtime": 1793429328.6030123,
+    "seen": 1793542075.3865595,
+    "ast_hash": "480bdf0c003024e6f5167a4887457eee",
     "semantic_hash": ""
   },
   "app/src/main/java/id/wynn/voclone/StudioScreen.kt": {
-    "mtime": 1793382699.7779188,
-    "seen": 1793382755.5127726,
-    "ast_hash": "238bf93ecb49f621b637ee3f2898f811",
+    "mtime": 1793541896.4371932,
+    "seen": 1793542075.3865678,
+    "ast_hash": "d3068881c815a64a85d5b6e5016d1bf6",
     "semantic_hash": ""
   },
   "app/src/main/java/id/wynn/voclone/StudioViewModel.kt": {
-    "mtime": 1793379589.087985,
-    "seen": 1793380106.865436,
-    "ast_hash": "04fd60bc9d7b299e889ccaadc93b7424",
+    "mtime": 1793541963.9633145,
+    "seen": 1793542075.3865695,
+    "ast_hash": "898f3557c677e9a0ff3f4c8ec3156d79",
     "semantic_hash": ""
   },
   "app/src/main/java/id/wynn/voclone/Theme.kt": {
@@ -84,9 +84,9 @@
     "semantic_hash": ""
   },
   "app/src/main/java/id/wynn/voclone/UpdateManifest.kt": {
-    "mtime": 1793375504.9142919,
-    "seen": 1793376049.7172217,
-    "ast_hash": "b8e4aaad390e46cdefc53b66a7cfa773",
+    "mtime": 1793541017.9727948,
+    "seen": 1793542075.386574,
+    "ast_hash": "3e174dcd8dde8425d432062266970be8",
     "semantic_hash": ""
   },
   "app/src/test/java/id/wynn/voclone/ApkTransferTest.kt": {
@@ -114,9 +114,9 @@
     "semantic_hash": ""
   },
   "app/src/test/java/id/wynn/voclone/UpdateManifestTest.kt": {
-    "mtime": 1793375504.9158263,
-    "seen": 1793376049.7172267,
-    "ast_hash": "468c1cda9de35ce6281cfa5cc16f5a54",
+    "mtime": 1793540597.3577657,
+    "seen": 1793542075.3865917,
+    "ast_hash": "a4b8d093069f4c8ed9f22a77462ae4d2",
     "semantic_hash": ""
   },
   "build.gradle.kts": {
@@ -132,9 +132,9 @@
     "semantic_hash": ""
   },
   "native/control.h": {
-    "mtime": 1793376976.9795568,
-    "seen": 1793377756.0898523,
-    "ast_hash": "c22b0484e0fe738dfb38ba128ab2f970",
+    "mtime": 1793428493.2439923,
+    "seen": 1793542075.3866012,
+    "ast_hash": "e8d88e1a0871d438ff2c2dc6d7f74cc5",
     "semantic_hash": ""
   },
   "native/fetch.py": {
@@ -150,9 +150,9 @@
     "semantic_hash": ""
   },
   "native/mp3/Mp3Encoder.c": {
-    "mtime": 1793374665.8711114,
-    "seen": 1793376049.7172716,
-    "ast_hash": "dad0bc6350485779a6ec07b5b1b28ddd",
+    "mtime": 1793541423.4718022,
+    "seen": 1793542075.3866076,
+    "ast_hash": "bcdf0e3df57d5134c6b4280b4c622b92",
     "semantic_hash": ""
   },
   "native/mp3/include/Mp3Encoder.h": {
@@ -168,15 +168,15 @@
     "semantic_hash": ""
   },
   "native/omni.cpp": {
-    "mtime": 1793378477.2005048,
-    "seen": 1793380106.865474,
-    "ast_hash": "b95815d87bbbfbcad1e3f927e3cf211e",
+    "mtime": 1793428784.32433,
+    "seen": 1793542075.386612,
+    "ast_hash": "546320f1ea2324e064bd60323a0ccb99",
     "semantic_hash": ""
   },
   "native/patch_omni.py": {
-    "mtime": 1793376349.103662,
-    "seen": 1793377756.0898664,
-    "ast_hash": "3222fca5819d5be18a2b90c6e2e39f45",
+    "mtime": 1793428272.069416,
+    "seen": 1793542075.3866131,
+    "ast_hash": "45a2539bbba52e1ee65179d2218c50e4",
     "semantic_hash": ""
   },
   "native/pins.json": {
@@ -198,9 +198,9 @@
     "semantic_hash": ""
   },
   "scripts/build-native.sh": {
-    "mtime": 1793374665.882947,
-    "seen": 1793376049.7172785,
-    "ast_hash": "9e523e313e5672f49e33f801209a01f6",
+    "mtime": 1793428786.2762477,
+    "seen": 1793542075.3866463,
+    "ast_hash": "a5099b2a9d8955716b20868509f47240",
     "semantic_hash": ""
   },
   "settings.gradle.kts": {
@@ -228,9 +228,9 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1793377439.1681516,
-    "seen": 1793377756.0899005,
-    "ast_hash": "980581881d9f65df9ea3a89efba0bdb9",
+    "mtime": 1793404840.253189,
+    "seen": 1793542075.38666,
+    "ast_hash": "0bc9c1d256ce3881e10094eb39cc0722",
     "semantic_hash": ""
   },
   "app/src/main/assets/licenses/Higgs-Audio-2.txt": {
@@ -330,9 +330,9 @@
     "semantic_hash": ""
   },
   "native/CMakeLists.txt": {
-    "mtime": 1793374665.8811655,
-    "seen": 1793376049.7173934,
-    "ast_hash": "cbcc366e67fd82b1e8ab94d921293c40",
+    "mtime": 1793428785.3322887,
+    "seen": 1793542075.3867147,
+    "ast_hash": "f37dbb2bc7c426bc5e13d70836f743e9",
     "semantic_hash": ""
   },
   "qa/host/input-en.txt": {
@@ -366,15 +366,15 @@
     "semantic_hash": ""
   },
   ".github/workflows/android.yml": {
-    "mtime": 1793382701.3138468,
-    "seen": 1793382755.5127409,
-    "ast_hash": "9fd89c4844d642dc0fafa9dc22d7ee56",
+    "mtime": 1793542200.5653505,
+    "seen": 1793542225.1604283,
+    "ast_hash": "7762707b21be29d87b8d8e6ad8000d4d",
     "semantic_hash": ""
   },
   "app/src/androidTest/java/id/wynn/voclone/DeviceTest.kt": {
-    "mtime": 1793376762.7197788,
-    "seen": 1793377756.0897892,
-    "ast_hash": "f5da30a4a12d66ff42e4a28fae10c792",
+    "mtime": 1793541580.9688685,
+    "seen": 1793542075.3865256,
+    "ast_hash": "83dac711d05d5a5bce079e39714cd267",
     "semantic_hash": ""
   },
   "app/src/androidTest/java/id/wynn/voclone/StudioUiTest.kt": {
@@ -414,9 +414,9 @@
     "semantic_hash": ""
   },
   "scripts/package-release.py": {
-    "mtime": 1793380520.3779082,
-    "seen": 1793381100.013337,
-    "ast_hash": "535c4988b9c955d9007eb2b8af0bd20f",
+    "mtime": 1793541019.404819,
+    "seen": 1793542075.3866477,
+    "ast_hash": "4e93286f3b0385d41a5a25833e485db3",
     "semantic_hash": ""
   },
   "scripts/publish-release.py": {
@@ -426,9 +426,9 @@
     "semantic_hash": ""
   },
   "scripts/verify-apk.py": {
-    "mtime": 1793378477.2021856,
-    "seen": 1793380106.865504,
-    "ast_hash": "357945bad001818a393eeb64540892ea",
+    "mtime": 1793541504.874332,
+    "seen": 1793542075.386653,
+    "ast_hash": "7e1064d9ab38b979aa3f52c3ff5bd942",
     "semantic_hash": ""
   },
   "THIRD_PARTY_NOTICES.md": {
@@ -450,9 +450,9 @@
     "semantic_hash": ""
   },
   "docs/BUILD.md": {
-    "mtime": 1793382318.9527707,
-    "seen": 1793382755.5129852,
-    "ast_hash": "6065969d0cacd0808cf2045874255f41",
+    "mtime": 1793405372.6208918,
+    "seen": 1793542075.3866956,
+    "ast_hash": "7f5cdcea2298f5fe424d72a31a3fb5d6",
     "semantic_hash": ""
   },
   "docs/DEVICE_TEST.md": {
@@ -528,15 +528,15 @@
     "semantic_hash": ""
   },
   "docs/UI_AUDIT.md": {
-    "mtime": 1793379042.9623704,
-    "seen": 1793380106.8655615,
-    "ast_hash": "f1c2f09c8f8bd3f1ac98b75d70e88238",
+    "mtime": 1793404840.2529285,
+    "seen": 1793542075.3867023,
+    "ast_hash": "4b6f4be7bdf12b204793547ca7511161",
     "semantic_hash": ""
   },
   "docs/VERIFICATION.md": {
-    "mtime": 1793382319.968728,
-    "seen": 1793382755.512991,
-    "ast_hash": "85085ddfedc0b2bd123d731c89648947",
+    "mtime": 1793542220.8851647,
+    "seen": 1793542225.1605766,
+    "ast_hash": "69eb54289f7d5c9cb879529d71e7b056",
     "semantic_hash": ""
   },
   "qa/host/recognized-id.txt": {
@@ -558,9 +558,9 @@
     "semantic_hash": ""
   },
   "qa/evidence/apk-release.json": {
-    "mtime": 1793381098.605022,
-    "seen": 1793381100.0133255,
-    "ast_hash": "ab0fb6efdb61d17c21f993cb8f9c4ed4",
+    "mtime": 1793385572.498889,
+    "seen": 1793542075.3866293,
+    "ast_hash": "f28cc1f1a60e41c912b97ef607da2ee8",
     "semantic_hash": ""
   },
   "qa/evidence/jvm-results.json": {
@@ -570,15 +570,279 @@
     "semantic_hash": ""
   },
   "qa/evidence/contrast.txt": {
-    "mtime": 1793380107.2631283,
-    "seen": 1793381100.0133853,
-    "ast_hash": "19c2b5c5940da49cb08161e7d92d8258",
+    "mtime": 1793385263.213219,
+    "seen": 1793542075.3867207,
+    "ast_hash": "82bce68725d09c379ee220efe4a1d68a",
     "semantic_hash": ""
   },
   "qa/evidence/ci-results.json": {
-    "mtime": 1793382321.0937412,
-    "seen": 1793382755.512829,
-    "ast_hash": "ac42c9fa68a21e460ad9a0d36f8cabb0",
+    "mtime": 1793404840.2534993,
+    "seen": 1793542075.386631,
+    "ast_hash": "d117b25b4fd5ed85554096f67ff60a8c",
+    "semantic_hash": ""
+  },
+  "app/src/androidTest/java/id/wynn/voclone/ProgressUiTest.kt": {
+    "mtime": 1793541580.9561515,
+    "seen": 1793542075.3865285,
+    "ast_hash": "5b1ccce29f280b393b32cfc8a7656d19",
+    "semantic_hash": ""
+  },
+  "app/src/androidTest/java/id/wynn/voclone/WorkerInferenceTest.kt": {
+    "mtime": 1793542200.5652125,
+    "seen": 1793542225.1604462,
+    "ast_hash": "826367edb1ffdbe4cc18b0bb0ee03869",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/id/wynn/voclone/Diagnostics.kt": {
+    "mtime": 1793538617.2728276,
+    "seen": 1793542075.3865492,
+    "ast_hash": "075ba1c5dad34e58168312954b61acfc",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/id/wynn/voclone/InferenceProgress.kt": {
+    "mtime": 1793429148.9325244,
+    "seen": 1793542075.3865528,
+    "ast_hash": "8ddd7742e771f8b60a13da1d0923644d",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/id/wynn/voclone/SpeechChunks.kt": {
+    "mtime": 1793541896.436781,
+    "seen": 1793542075.386561,
+    "ast_hash": "b9b3ec9ee3f294236c6035eb9d695eed",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/id/wynn/voclone/SpeechInput.kt": {
+    "mtime": 1793541480.8590786,
+    "seen": 1793542075.3865626,
+    "ast_hash": "466bbbbcf53fbc89eaecc35ee7ccedfd",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/id/wynn/voclone/SpeechRequest.kt": {
+    "mtime": 1793428149.4158916,
+    "seen": 1793542075.3865638,
+    "ast_hash": "6aa5a24fde528a81a2e7654724c1229a",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/id/wynn/voclone/SpeechStorage.kt": {
+    "mtime": 1793541739.6990404,
+    "seen": 1793542075.3865652,
+    "ast_hash": "84872fc270d34b53140d1cabc9cbfb2d",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/id/wynn/voclone/StreamingWav.kt": {
+    "mtime": 1793541423.457402,
+    "seen": 1793542075.3865664,
+    "ast_hash": "445c183d6ca7a12b8e5b64f4a37dc025",
+    "semantic_hash": ""
+  },
+  "app/src/main/java/id/wynn/voclone/TaskProgress.kt": {
+    "mtime": 1793541504.8742836,
+    "seen": 1793542075.386571,
+    "ast_hash": "d76de4c6dd677921b5b76f1c637a866c",
+    "semantic_hash": ""
+  },
+  "app/src/test/java/id/wynn/voclone/DiagnosticStoreTest.kt": {
+    "mtime": 1793428912.4861953,
+    "seen": 1793542075.3865793,
+    "ast_hash": "2cf0d8869df5431d64acb881e5519fe4",
+    "semantic_hash": ""
+  },
+  "app/src/test/java/id/wynn/voclone/InferenceProgressTest.kt": {
+    "mtime": 1793429857.5921714,
+    "seen": 1793542075.3865805,
+    "ast_hash": "2f3e76e35b5de0850fc44449194b509b",
+    "semantic_hash": ""
+  },
+  "app/src/test/java/id/wynn/voclone/SpeechChunksTest.kt": {
+    "mtime": 1793541963.9631693,
+    "seen": 1793542075.3865852,
+    "ast_hash": "e5098b05b7de5f9bb5277fc5e2939990",
+    "semantic_hash": ""
+  },
+  "app/src/test/java/id/wynn/voclone/SpeechInputTest.kt": {
+    "mtime": 1793541480.8600814,
+    "seen": 1793542075.3865871,
+    "ast_hash": "977651a4ef73c82fc98f73c0a44f560e",
+    "semantic_hash": ""
+  },
+  "app/src/test/java/id/wynn/voclone/SpeechRequestTest.kt": {
+    "mtime": 1793427982.5032823,
+    "seen": 1793542075.3865886,
+    "ast_hash": "4ee2c61b58afa69120dfdfe1fd214a72",
+    "semantic_hash": ""
+  },
+  "app/src/test/java/id/wynn/voclone/StreamingWavTest.kt": {
+    "mtime": 1793541115.7755241,
+    "seen": 1793542075.38659,
+    "ast_hash": "93f4a25fe1122bfa9376bea744ca2491",
+    "semantic_hash": ""
+  },
+  "native/cpu_features.h": {
+    "mtime": 1793428716.831066,
+    "seen": 1793542075.3866026,
+    "ast_hash": "e032de73fb30488c02bf7a47140376a5",
+    "semantic_hash": ""
+  },
+  "native/progress.h": {
+    "mtime": 1793428271.1214616,
+    "seen": 1793542075.386616,
+    "ast_hash": "f1da865548bddfc1fa475f5de37318a7",
+    "semantic_hash": ""
+  },
+  "native/quant_selftest.h": {
+    "mtime": 1793428783.3563697,
+    "seen": 1793542075.3866174,
+    "ast_hash": "355e748df6dcbaff1aed4a6399dfcfad",
+    "semantic_hash": ""
+  },
+  "native/tests/cpu_features_test.cpp": {
+    "mtime": 1793428664.913546,
+    "seen": 1793542075.3866189,
+    "ast_hash": "b08ba892b4826d46804ddbefc9cbde2b",
+    "semantic_hash": ""
+  },
+  "native/tests/mp3_limits_test.c": {
+    "mtime": 1793541093.571048,
+    "seen": 1793542075.3866205,
+    "ast_hash": "de3dffca17cdb71e6dd59980fab58497",
+    "semantic_hash": ""
+  },
+  "native/tests/progress_test.cpp": {
+    "mtime": 1793428212.2764347,
+    "seen": 1793542075.386622,
+    "ast_hash": "cebe147b6f8699815628ab1297e26562",
+    "semantic_hash": ""
+  },
+  "native/tests/quant_test.cpp": {
+    "mtime": 1793428718.7149832,
+    "seen": 1793542075.3866239,
+    "ast_hash": "5f0bac819bed2708a1af8f8d25fa0a64",
+    "semantic_hash": ""
+  },
+  "qa/evidence/update-host-progress.json": {
+    "mtime": 1793542062.7205296,
+    "seen": 1793542075.3866367,
+    "ast_hash": "b5a1abb0e4a6ab5df24b6b26226852ac",
+    "semantic_hash": ""
+  },
+  "qa/host_progress.cpp": {
+    "mtime": 1793541674.8893106,
+    "seen": 1793542075.3866432,
+    "ast_hash": "6ba0f9e07f0618b87dcb7a0a87f3f5ec",
+    "semantic_hash": ""
+  },
+  "scripts/test-arm-kernels.sh": {
+    "mtime": 1793541812.8809655,
+    "seen": 1793542075.386651,
+    "ast_hash": "9dc9304429d5fd691e00864850b799e1",
+    "semantic_hash": ""
+  },
+  "docs/UPDATE_0.2.md": {
+    "mtime": 1793542062.6928477,
+    "seen": 1793542075.386704,
+    "ast_hash": "121544e2883c1c1b5bbc3866e888b671",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-10-31-performance-ledger.md": {
+    "mtime": 1793542062.7210555,
+    "seen": 1793542075.3867111,
+    "ast_hash": "7a0cb50d7163e84443503ec9d64c4853",
+    "semantic_hash": ""
+  },
+  "docs/superpowers/plans/2026-10-31-performance-update.md": {
+    "mtime": 1793427737.6906903,
+    "seen": 1793542075.3867126,
+    "ast_hash": "4d234246cfcd2bb961d905c1cf69a9f0",
+    "semantic_hash": ""
+  },
+  "qa/evidence/android16/abi.txt": {
+    "mtime": 1793404763.5970447,
+    "seen": 1793542075.386716,
+    "ast_hash": "54c7b6dc993574c4a2fb722b27b000df",
+    "semantic_hash": ""
+  },
+  "qa/evidence/android16/instrumentation.txt": {
+    "mtime": 1793404763.6186173,
+    "seen": 1793542075.3867176,
+    "ast_hash": "73890fadd65f8e45d22a705e89af3731",
+    "semantic_hash": ""
+  },
+  "qa/evidence/android16/narrow-large.txt": {
+    "mtime": 1793404763.6186888,
+    "seen": 1793542075.386719,
+    "ast_hash": "df2b2aef4d41e367d79f245c048dfd4e",
+    "semantic_hash": ""
+  },
+  "qa/evidence/update-host-progress.txt": {
+    "mtime": 1793542062.7206244,
+    "seen": 1793542075.386722,
+    "ast_hash": "417ffe4da19ae447ecb4a2e35edb4333",
+    "semantic_hash": ""
+  },
+  "release-inputs/README.md": {
+    "mtime": 1793405372.6206222,
+    "seen": 1793542075.3867393,
+    "ast_hash": "abd425d3b602945ed64f15235ed4164f",
+    "semantic_hash": ""
+  },
+  "qa/evidence/android16/device/screenshots/clone-dark-narrow-large.png": {
+    "mtime": 1793404763.5979326,
+    "seen": 1793542075.3867443,
+    "ast_hash": "86700ee1072a0c4a4f926aa5fa679f9c",
+    "semantic_hash": ""
+  },
+  "qa/evidence/android16/device/screenshots/clone-dark.png": {
+    "mtime": 1793404763.5997202,
+    "seen": 1793542075.386746,
+    "ast_hash": "71bb5440d99c2ed3b30ea933e1e7585b",
+    "semantic_hash": ""
+  },
+  "qa/evidence/android16/device/screenshots/clone-narrow-large.png": {
+    "mtime": 1793404763.6022656,
+    "seen": 1793542075.3867474,
+    "ast_hash": "2c53fa1ee8ca50d0f773aba4ad37f8bb",
+    "semantic_hash": ""
+  },
+  "qa/evidence/android16/device/screenshots/clone.png": {
+    "mtime": 1793404763.6043127,
+    "seen": 1793542075.3867488,
+    "ast_hash": "1e1925c30a1f7f7c0eb0b1290215c887",
+    "semantic_hash": ""
+  },
+  "qa/evidence/android16/device/screenshots/generate-dark-narrow-large.png": {
+    "mtime": 1793404763.6066225,
+    "seen": 1793542075.3867502,
+    "ast_hash": "f37fc8bb52a6aba91f7f08390a1ad1fa",
+    "semantic_hash": ""
+  },
+  "qa/evidence/android16/device/screenshots/generate-dark.png": {
+    "mtime": 1793404763.6076922,
+    "seen": 1793542075.3867517,
+    "ast_hash": "22ec982c30966d25a16f11a6cea50795",
+    "semantic_hash": ""
+  },
+  "qa/evidence/android16/device/screenshots/settings-dark-narrow-large.png": {
+    "mtime": 1793404763.6094682,
+    "seen": 1793542075.386753,
+    "ast_hash": "ec5a4e1838b16dce92a05c5a1f4c649b",
+    "semantic_hash": ""
+  },
+  "qa/evidence/android16/device/screenshots/settings-dark.png": {
+    "mtime": 1793404763.6108003,
+    "seen": 1793542075.3867543,
+    "ast_hash": "6e480d2ef4883b7b223adda81764a28f",
+    "semantic_hash": ""
+  },
+  "qa/evidence/android16/device/screenshots/settings-narrow-large.png": {
+    "mtime": 1793404763.61383,
+    "seen": 1793542075.3867555,
+    "ast_hash": "979e6fbece9886606d27663904e9547c",
+    "semantic_hash": ""
+  },
+  "qa/evidence/android16/device/screenshots/settings.png": {
+    "mtime": 1793404763.6166081,
+    "seen": 1793542075.386757,
+    "ast_hash": "9217b2b97b982df7d94d7264e97c7c06",
     "semantic_hash": ""
   }
 }

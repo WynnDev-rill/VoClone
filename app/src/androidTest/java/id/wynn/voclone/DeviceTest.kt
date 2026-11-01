@@ -18,13 +18,19 @@ class DeviceTest {
     @Test fun loadsAllArm64NativeDependencies() {
         System.loadLibrary("vc_omni");System.loadLibrary("vc_whisper");System.loadLibrary("vc_mp3")
         assertEquals(2,NativeBridge.omniAbi())
+        assertTrue("Generic real Q4_K/Q6_K kernel math",NativeBridge.mathSelfTest())
+        val selected=CpuRuntime.select()
+        if(selected.fast) {
+            assertTrue(NativeBridge.hasI8mm());assertTrue(FastNativeBridge.mathSelfTest())
+            assertEquals("arm64-v8a",android.os.Build.SUPPORTED_ABIS.first())
+        }
     }
     @Test fun decodesRealWavAndEncodedMp3() = runBlocking {
         val dir=File(context.cacheDir,"exports").apply { mkdirs() }
         val wav=File(dir,"codec-test.wav");val mp3=File(dir,"codec-test.mp3")
         try {
             val audio=PcmAudio(FloatArray(96000) { kotlin.math.sin(it*.08).toFloat()*.3f },24000)
-            audio.writeWav(wav);encodeMp3(audio,mp3)
+            audio.writeWav(wav);encodeMp3(wav,mp3)
             for(file in listOf(wav,mp3)) {
                 val uri=FileProvider.getUriForFile(context,"${context.packageName}.files",file)
                 val decoded=AndroidAudio.decode(context,uri)

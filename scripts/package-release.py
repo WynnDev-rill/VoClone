@@ -11,7 +11,7 @@ build=(root/'app/build.gradle.kts').read_text();version=re.search(r'versionName 
 out=root/'distribution';out.mkdir(exist_ok=True)
 apk=out/f'VoClone-{version}-arm64.apk';shutil.copy2(root/'app/build/outputs/apk/release/app-release.apk',apk)
 sha=hashlib.file_digest(apk.open('rb'),'sha256').hexdigest()
-manifest=dict(versionCode=code,versionName=version,packageName='id.wynn.voclone',minSdk=29,apkUrl=f'https://github.com/WynnDev-rill/Wynn-Store/releases/download/voclone-v{version}/{apk.name}',sha256=sha,signerSha256=(root/'docs/signing-sha256.txt').read_text().strip(),sizeBytes=apk.stat().st_size,sourceCommit=commit,notes='VoClone alpha: cloning lokal OmniVoice + Whisper. Baca laporan verifikasi; kualitas dan stabilitas POCO F6 memerlukan uji perangkat fisik.')
+manifest=dict(versionCode=code,versionName=version,packageName='id.wynn.voclone',minSdk=29,apkUrl=f'https://github.com/WynnDev-rill/VoClone/releases/download/v{version}/{apk.name}',sha256=sha,signerSha256=(root/'docs/signing-sha256.txt').read_text().strip(),sizeBytes=apk.stat().st_size,sourceCommit=commit,notes='VoClone: preview singkat, teks panjang per bagian, progres native dan kernel ARM terpilih. Baca laporan verifikasi untuk batas pengujian perangkat.')
 (out/'alpha.json').write_text(json.dumps(manifest,indent=2)+'\n')
 (out/(apk.name+'.sha256')).write_text(sha+'  '+apk.name+'\n')
 source=out/f'VoClone-{version}-source.tar.gz'

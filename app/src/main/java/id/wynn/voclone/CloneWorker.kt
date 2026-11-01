@@ -42,6 +42,8 @@ class CloneWorker(context: Context,parameters: WorkerParameters): CoroutineWorke
     private var failureType: String?=null
     private var peakObservedPssKb=0L
     private var reusedOutput=false
+    private var appPart=0
+    private var appParts=0
     private var lastUiPublishMs=0L
     private fun publish(data: Data) {
         val now=SystemClock.elapsedRealtime()
@@ -64,7 +66,7 @@ class CloneWorker(context: Context,parameters: WorkerParameters): CoroutineWorke
             val snapshot=tracker.snapshot(now)
             if(previous!=event.stage || now-lastPublishedMs>=500 || event.total>0 && event.done==event.total) {
                 publish(workDataOf("phase" to event.label,"stage" to event.stage,"done" to event.done.toLong(),"total" to event.total.toLong(),
-                    "kind" to "inference","chunk" to snapshot.chunk,"backend" to snapshot.backend,
+                    "kind" to "inference","part" to appPart,"parts" to appParts,"chunk" to snapshot.chunk,"backend" to snapshot.backend,
                     "startedElapsedMs" to startedMs,"updatedElapsedMs" to now-snapshot.sinceProgressMs))
                 lastPublishedMs=now
             }
@@ -81,7 +83,7 @@ class CloneWorker(context: Context,parameters: WorkerParameters): CoroutineWorke
                 System.currentTimeMillis(),referenceMs,textCodepoints,language=inputData.getString("language") ?: "none",attempt=runAttemptCount,
                 pssKb=pss,javaHeapBytes=runtime.totalMemory()-runtime.freeMemory(),
                 thermalStatus=applicationContext.getSystemService(PowerManager::class.java).currentThermalStatus,
-                stopReason=stopReason,failureType=failureType,peakObservedPssKb=peakObservedPssKb,reusedOutput=reusedOutput))
+                stopReason=if(Build.VERSION.SDK_INT>=31)stopReason else WorkInfo.STOP_REASON_UNKNOWN,failureType=failureType,peakObservedPssKb=peakObservedPssKb,reusedOutput=reusedOutput))
         } catch(e: OutOfMemoryError) { /* Best-effort telemetry must not override inference's outcome. */ }
         catch(e: Exception) { android.util.Log.w("VoClone","Diagnostic snapshot unavailable: ${e.javaClass.simpleName}") }
     }
@@ -133,26 +135,67 @@ class CloneWorker(context: Context,parameters: WorkerParameters): CoroutineWorke
                             PcmAudio.readWav(File(profiles.directory(id.toString()),"preview.wav")).validateOutput()
                             reusedOutput=true;return@withLock succeeded(workDataOf("voice" to id.toString()))
                         }
-                        if(action=="generate" && output.isFile && runCatching { PcmAudio.readWav(output).validateOutput() }.isSuccess) { reusedOutput=true;return@withLock succeeded(workDataOf("result" to output.name)) }
+                        val runningJob=currentCoroutineContext()
+                        if(action=="generate" && output.isFile && runCatching { waveSummary(output) { runningJob.ensureActive() }.validateOutput() }.isSuccess) { reusedOutput=true;return@withLock succeeded(workDataOf("result" to output.name)) }
+                        runningJob.ensureActive()
                         val voice=if(action=="generate")profiles.get(inputData.getString("voice") ?: error("Pilih profil suara.")) else null
                         val reference=if(voice!=null)File(profiles.directory(voice.id),"reference.wav") else privateReference(context,inputData.getString("reference") ?: error("Pilih audio terlebih dahulu."))
                         val transcript=voice?.transcript ?: inputData.getString("transcript").orEmpty()
                         require(transcript.isNotBlank()) { "Isi transkrip referensi atau jalankan Whisper dahulu." }
                         val text=inputData.getString("text").orEmpty()
-                        textCodepoints=text.codePointCount(0,text.length)
+                        textCodepoints=inputData.getInt("textCodepoints",text.codePointCount(0,text.length))
                         report("Memeriksa model…")
                         val samples=PcmAudio.readWav(reference);referenceMs=(samples.duration*1000).toLong()
-                        val audio=VoiceEngine(models).clone(samples,transcript,text,inputData.getString("language") ?: "none",::inference)
-                        currentCoroutineContext().ensureActive()
-                        report("Menyimpan audio…")
-                        audio.writeWav(temporary,synthetic=true)
-                        PcmAudio.readWav(temporary).validateOutput()
-                        currentCoroutineContext().ensureActive()
+                        val language=inputData.getString("language") ?: "none"
+                        val job=currentCoroutineContext()
+                        val engine=VoiceEngine(models)
                         if(action=="clone") {
+                            val audio=engine.clone(samples,transcript,text,language,::inference)
+                            job.ensureActive();report("Menyimpan pratinjau…")
+                            audio.writeWav(temporary,synthetic=true)
+                            PcmAudio.readWav(temporary).validateOutput();job.ensureActive()
                             val profile=profiles.create(inputData.getString("name") ?: "Suara saya",reference,transcript,temporary,id.toString())
                             succeeded(workDataOf("voice" to profile.id))
                         } else {
+                            val textFile=inputData.getString("textFile")?.let { speechTextFile(File(context.filesDir,"texts"),it) }
+                            fun reader(): java.io.Reader=textFile?.bufferedReader() ?: text.reader()
+                            appParts=reader().use { speechChunks(it) { job.ensureActive() }.count() }
+                            require(appParts>0) { "Tulis teks terlebih dahulu." }
+                            val parts=File(context.filesDir,"results/$id.parts").apply { mkdirs() }
+                            val signature=sha256((BuildConfig.VERSION_CODE.toString()+"|chunks280|"+language+"|"+
+                                fileSha256(reference) { job.ensureActive() }+"|"+sha256(transcript.toByteArray())+"|"+
+                                (textFile?.let { fileSha256(it) { job.ensureActive() } } ?: sha256(text.toByteArray()))+
+                                "|"+ModelCatalog.assets.joinToString { it.hash }).toByteArray())
+                            val signatureFile=File(parts,"signature")
+                            if(signatureFile.readTextOrNull()!=signature) {
+                                parts.listFiles()?.forEach { it.delete() };atomicWrite(signatureFile,signature)
+                            }
+                            reader().use { input ->
+                                StreamingWavWriter(temporary) { job.ensureActive() }.use { writer ->
+                                    speechChunks(input) { job.ensureActive() }.forEachIndexed { index,partText ->
+                                        job.ensureActive();appPart=index+1
+                                        val part=File(parts,"$index.wav");val receipt=File(parts,"$index.sha256")
+                                        val reusable=part.isFile && receipt.readTextOrNull()==fileSha256(part) { job.ensureActive() } &&
+                                            runCatching { waveSummary(part) { job.ensureActive() }.validateOutput() }.isSuccess
+                                        job.ensureActive()
+                                        if(!reusable) {
+                                            receipt.delete();part.delete()
+                                            val stage=File(parts,"$index.part")
+                                            try {
+                                                val audio=engine.clone(samples,transcript,partText,language,::inference)
+                                                job.ensureActive();audio.writeWav(stage,true)
+                                                PcmAudio.readWav(stage).validateOutput();job.ensureActive()
+                                                check(stage.renameTo(part));atomicWrite(receipt,fileSha256(part) { job.ensureActive() })
+                                            } finally { stage.delete() }
+                                        }
+                                        writer.appendWav(part)
+                                    }
+                                    report("Menyelesaikan berkas WAV…");writer.finish()
+                                }
+                            }
+                            waveSummary(temporary) { job.ensureActive() }.validateOutput();job.ensureActive()
                             check(temporary.renameTo(output)) { "Gagal menyimpan hasil." }
+                            parts.deleteRecursively();textFile?.delete()
                             succeeded(workDataOf("result" to output.name))
                         }
                     }
@@ -173,6 +216,13 @@ class CloneWorker(context: Context,parameters: WorkerParameters): CoroutineWorke
             }
             Result.failure(workDataOf("error" to message,"errorType" to e.javaClass.simpleName))
         }
-        finally { saveDiagnostic(outcome);temporary.delete() }
+        finally {
+            saveDiagnostic(outcome);temporary.delete()
+            val explicitCancel=outcome=="cancelled" && Build.VERSION.SDK_INT>=31 && stopReason in setOf(WorkInfo.STOP_REASON_CANCELLED_BY_APP,WorkInfo.STOP_REASON_USER)
+            if(outcome!="cancelled" || explicitCancel) {
+                File(context.filesDir,"results/$id.parts").deleteRecursively()
+                inputData.getString("textFile")?.let { runCatching { speechTextFile(File(context.filesDir,"texts"),it).delete() } }
+            }
+        }
     }
 }

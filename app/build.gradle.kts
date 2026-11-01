@@ -12,11 +12,11 @@ android {
         applicationId = "id.wynn.voclone"
         minSdk = 29
         targetSdk = 36
-        versionCode = 1
-        versionName = "0.1.0-alpha"
+        versionCode = 2
+        versionName = "0.2.0-alpha"
         ndk { abiFilters += "arm64-v8a" }
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("String", "UPDATE_URL", "\"https://raw.githubusercontent.com/WynnDev-rill/Wynn-Store/main/voclone/updates/alpha.json\"")
+        buildConfigField("String", "UPDATE_URL", "\"https://raw.githubusercontent.com/WynnDev-rill/VoClone/main/updates/alpha.json\"")
     }
     val keyPath = System.getenv("VOCLONE_KEYSTORE")
     if (keyPath != null) {

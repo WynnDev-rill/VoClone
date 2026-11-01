@@ -1,0 +1,17 @@
+{
+  "runtime": "pinned patched OmniVoice C API; actual model inference",
+  "language": "en",
+  "text": "Hello.",
+  "reference_seconds": 3.2,
+  "rate": 24000,
+  "frames": 39360,
+  "duration": 1.64,
+  "rms": 0.04576892825369334,
+  "bytes": 78764,
+  "sha256": "ad66289410726e2a955909dbbee42d83309ec08f06323e18f0ea2428ff5ab15c",
+  "progress": "reference complete; 32/32 completed native iterations; decode complete",
+  "host_seconds_including_load_and_cancel": 256.466,
+  "physical_device_benchmark": false,
+  "speaker_quality_verified": false,
+  "cancellation": "OV_STATUS_CANCELLED within60s; see sanitized log"
+}

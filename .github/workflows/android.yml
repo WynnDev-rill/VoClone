@@ -10,6 +10,10 @@ on:
         description: 'Build signed alpha release (requires owner signing Secrets)'
         type: boolean
         default: false
+      full_inference:
+        description: 'Run real offline Worker E2E; operator accepts documented noncommercial model terms for QA'
+        type: boolean
+        default: false
 permissions:
   contents: read
 concurrency:
@@ -48,7 +52,7 @@ jobs:
           if-no-files-found: error
   release:
     if: startsWith(github.ref, 'refs/tags/') || (github.event_name == 'workflow_dispatch' && inputs.release)
-    needs: [validate, emulator]
+    needs: [validate, emulator, arm-kernels]
     runs-on: ubuntu-24.04
     timeout-minutes: 40
     permissions:
@@ -149,3 +153,64 @@ jobs:
         with:
           name: VoClone-Android16-emulator-evidence-attempt-${{ github.run_attempt }}
           path: qa/emulator/
+
+  arm-kernels:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Install ARM64 mathematical test tools
+        run: sudo apt-get update && sudo apt-get install -y g++-aarch64-linux-gnu qemu-user ninja-build libmp3lame-dev
+      - name: Execute generic and I8MM quantized kernels under ARM64 emulation
+        run: |
+          bash scripts/test-arm-kernels.sh
+          g++ -std=c++17 native/tests/progress_test.cpp -o /tmp/progress-test && /tmp/progress-test
+          g++ -std=c++17 native/tests/cpu_features_test.cpp -o /tmp/cpu-test && /tmp/cpu-test
+          cc -std=c11 -D_POSIX_C_SOURCE=200809L native/tests/mp3_limits_test.c native/mp3/Mp3Encoder.c -lm -lmp3lame -o /tmp/mp3-test
+          /tmp/mp3-test /tmp/long-mp3-init-test.mp3
+
+  real-inference:
+    if: github.event_name == 'workflow_dispatch' && inputs.full_inference
+    needs: validate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    permissions:
+      contents: read
+      actions: read
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: VoClone-arm64-debug
+          path: ci-artifacts
+      - run: test -e /dev/kvm && sudo chmod 666 /dev/kvm
+      - name: Download consented QA models then execute actual offline Workers
+        uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d
+        with:
+          api-level: 36
+          target: google_apis
+          arch: x86_64
+          profile: pixel_7
+          ram-size: 4096M
+          cores: 2
+          disable-animations: true
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          script: |
+            mkdir -p qa/worker-emulator
+            adb install -r ci-artifacts/outputs/apk/debug/app-debug.apk
+            adb install -r ci-artifacts/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+            adb shell am instrument -w -e class id.wynn.voclone.WorkerInferenceTest -e fullInference true -e acceptModelTerms true id.wynn.voclone.test/androidx.test.runner.AndroidJUnitRunner | tee qa/worker-emulator/instrumentation.txt
+            adb logcat -d -v threadtime > qa/worker-emulator/logcat.txt || true
+            adb pull /sdcard/Android/data/id.wynn.voclone/files/qa qa/worker-emulator/device || true
+            ! grep -E 'FAILURES!!!|INSTRUMENTATION_FAILED|INSTRUMENTATION_ABORTED|Process crashed' qa/worker-emulator/instrumentation.txt
+            grep -E 'OK \([1-9][0-9]* tests?\)' qa/worker-emulator/instrumentation.txt
+            find qa/worker-emulator/device -name worker-e2e.txt -exec grep -q 'PASS actual Whisper' {} \; -print | grep .
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: VoClone-real-worker-evidence
+          path: qa/worker-emulator/

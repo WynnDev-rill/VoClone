@@ -40,9 +40,10 @@ fun elapsedTime(milliseconds: Long): String {
         else LinearProgressIndicator(Modifier.fillMaxWidth())
         when {
             kind=="download" && total>0 -> Text("${bytes(done)} / ${bytes(total)}",style=MaterialTheme.typography.bodySmall)
-            stage==3 && total>0 -> Text("Bagian ${data.getInt("chunk",1)} • iterasi selesai $done/$total",style=MaterialTheme.typography.bodySmall)
+            stage==3 && total>0 -> Text("${done*100/total}% tahap sintesis • iterasi selesai $done/$total",style=MaterialTheme.typography.bodySmall)
             measurable -> Text("$done% transkripsi",style=MaterialTheme.typography.bodySmall)
         }
+        if(data.getInt("parts",0)>0)Text("Bagian teks ${data.getInt("part",1)}/${data.getInt("parts",1)}",style=MaterialTheme.typography.bodySmall)
         if(start>0)Text("Berjalan ${elapsedTime(now-start)}",style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
         if(kind=="inference" && updated>0 && now-updated>=30000)
             Text("Progres terakhir ${elapsedTime(now-updated)} lalu",style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)

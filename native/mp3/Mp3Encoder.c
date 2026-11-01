@@ -9,7 +9,7 @@
 struct VSMp3 { lame_t lame; FILE *file; uint64_t expected; uint64_t written; int finished; int failed; };
 static void quiet(const char *format, va_list arguments) { (void)format; (void)arguments; }
 VSMp3 *vs_mp3_create(const char *output, int32_t rate, uint64_t frames, int32_t synthetic) {
-    if (!output || !*output || rate != 24000 || frames < 1 || frames > 345600000) return NULL;
+    if (!output || !*output || rate != 24000 || frames < 1 || frames > (UINT32_MAX - 128ULL) / 2) return NULL;
     VSMp3 *value = calloc(1, sizeof(*value)); if (!value) return NULL;
     value->lame = lame_init(); value->expected = frames;
     if (!value->lame) { free(value); return NULL; }

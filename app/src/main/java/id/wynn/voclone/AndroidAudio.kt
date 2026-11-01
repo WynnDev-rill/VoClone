@@ -157,3 +157,20 @@ suspend fun encodeMp3(audio: PcmAudio,file: File) = withContext(Dispatchers.IO) 
         check(NativeMp3Bridge.finish(handle)==0 && file.length()>0) { "MP3 kosong atau tidak lengkap." };success=true
     } finally { NativeMp3Bridge.close(handle);if(!success)file.delete() }
 }
+
+/** Long outputs are encoded blockwise without loading their PCM into the Java heap. */
+suspend fun encodeMp3(source: File,file: File) = withContext(Dispatchers.IO) {
+    val info=waveInfo(source);require(info.rate==24000)
+    val job=currentCoroutineContext()
+    waveSummary(source) { job.ensureActive() }.validateOutput()
+    val handle=NativeMp3Bridge.create(file.absolutePath.toByteArray(Charsets.UTF_8),info.frames,true)
+    check(handle!=0L) { "Encoder MP3 tidak tersedia." }
+    var success=false
+    try {
+        forEachWaveBlock(source,{ job.ensureActive() }) { samples ->
+            check(NativeMp3Bridge.write(handle,samples)==0) { "Ekspor MP3 gagal." }
+        }
+        job.ensureActive()
+        check(NativeMp3Bridge.finish(handle)==0 && file.length()>0) { "MP3 kosong atau tidak lengkap." };success=true
+    } finally { NativeMp3Bridge.close(handle);if(!success)file.delete() }
+}

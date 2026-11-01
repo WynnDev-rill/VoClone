@@ -11,9 +11,9 @@ import java.security.MessageDigest
 import java.util.concurrent.TimeUnit
 
 fun sha256(bytes: ByteArray): String = MessageDigest.getInstance("SHA-256").digest(bytes).joinToString("") { "%02x".format(it) }
-fun fileSha256(file: File): String {
+fun fileSha256(file: File,checkpoint: ()->Unit={}): String {
     val digest=MessageDigest.getInstance("SHA-256")
-    file.inputStream().use { input -> val bytes=ByteArray(64*1024);while(true) { val n=input.read(bytes);if(n<0)break;digest.update(bytes,0,n) } }
+    file.inputStream().use { input -> val bytes=ByteArray(64*1024);while(true) { checkpoint();val n=input.read(bytes);if(n<0)break;digest.update(bytes,0,n) } }
     return digest.digest().joinToString("") { "%02x".format(it) }
 }
 data class ModelAsset(val name: String,val bytes: Long,val hash: String,val url: String) {
@@ -103,9 +103,10 @@ class ModelStore(context: Context) {
     fun file(index: Int)=File(directory,ModelCatalog.assets[index].name)
     suspend fun verify() = withContext(Dispatchers.IO) {
         require(accepted()) { "Terima ketentuan model di Pengaturan terlebih dahulu." }
+        val job=currentCoroutineContext()
         ModelCatalog.assets.forEach { asset ->
-            currentCoroutineContext().ensureActive()
-            require(File(directory,asset.name).let { it.isFile && it.length()==asset.bytes && fileSha256(it)==asset.hash }) { "Model belum lengkap atau rusak. Unduh ulang di Pengaturan." }
+            job.ensureActive()
+            require(File(directory,asset.name).let { it.isFile && it.length()==asset.bytes && fileSha256(it) { job.ensureActive() }==asset.hash }) { "Model belum lengkap atau rusak. Unduh ulang di Pengaturan." }
         }
     }
     suspend fun download(progress: (Long,Long)->Unit) {

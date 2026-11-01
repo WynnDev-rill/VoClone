@@ -5,6 +5,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.selection.toggleable
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -152,7 +153,7 @@ import java.util.Locale
                         Column(Modifier.padding(top=16.dp),verticalArrangement=Arrangement.spacedBy(12.dp)) {
                             Text("Generate Speech",style=MaterialTheme.typography.titleLarge,modifier=Modifier.semantics { heading() })
                             Text(vm.voices.firstOrNull { it.id==vm.selected }?.let { "Menggunakan ${it.name}" } ?: "Pilih suara dari My Voices.",style=MaterialTheme.typography.bodyMedium,color=MaterialTheme.colorScheme.onSurfaceVariant)
-                            OutlinedTextField(value=vm.text,onValueChange={ vm.text=it.take(600) },label={ Text("Teks untuk diucapkan") },supportingText={ Text("${vm.text.length} / 600") },minLines=4,maxLines=8,enabled=!vm.busy,modifier=Modifier.fillMaxWidth())
+                            OutlinedTextField(value=vm.text,onValueChange={ vm.text=it },label={ Text("Teks untuk diucapkan") },supportingText={ Text("${vm.text.codePointCount(0,vm.text.length)} karakter • teks panjang diproses per bagian") },minLines=4,maxLines=8,enabled=!vm.busy,modifier=Modifier.fillMaxWidth())
                             LanguagePicker(vm)
                             Button(onClick={ onTask();vm.generate() },enabled=!vm.busy && vm.installed && vm.selected!=null && vm.text.isNotBlank(),modifier=Modifier.fillMaxWidth().heightIn(min=56.dp),shape=RoundedCornerShape(12.dp)) { ButtonIcon(R.drawable.ic_play_arrow);Text("Generate Audio") }
                         }
@@ -188,7 +189,7 @@ import java.util.Locale
 }
 @Composable fun AudioPlayer(vm: StudioViewModel,file: File?,waveform: List<Float>,duration: Double,emptyLabel: String="") {
     val metadata by produceState(emptyList<Float>() to 0.0,file) {
-        if(file!=null && waveform.isEmpty())value=withContext(Dispatchers.IO) { runCatching { PcmAudio.readWav(file).let { it.waveform() to it.duration } }.getOrDefault(emptyList<Float>() to 0.0) }
+        if(file!=null && waveform.isEmpty())value=withContext(Dispatchers.IO) { val job=kotlinx.coroutines.currentCoroutineContext();runCatching { waveSummary(file) { job.ensureActive() }.let { it.waveform to it.duration } }.getOrDefault(emptyList<Float>() to 0.0) }
     }
     val displayWave=if(waveform.isNotEmpty())waveform else metadata.first
     val displayDuration=if(duration>0)duration else metadata.second

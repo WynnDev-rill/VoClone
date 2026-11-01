@@ -49,6 +49,7 @@ class StudioViewModel(application: Application): AndroidViewModel(application) {
     private val recorder=VoiceRecorder(context)
     private val exportMutex=kotlinx.coroutines.sync.Mutex()
     val busy: Boolean get() = importing || recording || queued || work?.state in setOf(WorkInfo.State.ENQUEUED,WorkInfo.State.RUNNING,WorkInfo.State.BLOCKED)
+    private var preparing: Job?=null
     private var handled: UUID?=null
     init {
         viewModelScope.launch {
@@ -99,19 +100,20 @@ class StudioViewModel(application: Application): AndroidViewModel(application) {
         }
     }
     suspend fun refresh() {
-        val data=withContext(Dispatchers.IO) { profiles.list() to models.installed() }
+        val data=withContext(Dispatchers.IO) {
+            pruneSpeechStorage(context,manager)
+            profiles.list() to models.installed()
+        }
         voices=data.first;installed=data.second;accepted=models.accepted()
         if(selected !in voices.map { it.id })select(voices.firstOrNull()?.id)
     }
     fun select(id: String?) { selected=id;prefs.edit().putString("voice",id).apply() }
     fun setAppearance(value: String) { theme=value;prefs.edit().putString("theme",value).apply() }
-    private fun action(block: suspend ()->Unit) {
-        viewModelScope.launch {
+    private fun action(block: suspend ()->Unit): Job = viewModelScope.launch {
             try { block() } catch(e: CancellationException) { throw e }
             catch(e: Exception) { error=e.message ?: "Operasi gagal. Coba kembali." }
             catch(e: LinkageError) { error="Runtime audio tidak tersedia di perangkat ini." }
             catch(e: OutOfMemoryError) { error="RAM tidak cukup. Tutup aplikasi berat atau gunakan sampel lebih singkat." }
-        }
     }
     fun importAudio(uri: Uri) {
         if(busy)return
@@ -150,7 +152,32 @@ class StudioViewModel(application: Application): AndroidViewModel(application) {
     }
     fun generate() {
         if(selected==null || text.isBlank()) { error="Pilih profil suara dan tulis teks terlebih dahulu.";return }
-        submit("generate",workDataOf("voice" to selected,"text" to text,"language" to language))
+        if(busy)return
+        if(!installed) { error="Unduh model AI terlebih dahulu di Pengaturan.";return }
+        val voice=selected!!;val fullText=text;val lang=language
+        stopPlayback();error=null;message=null;queued=true
+        preparing=action {
+            var extra: Data?=null
+            var enqueued=false
+            try {
+                extra=withContext(Dispatchers.IO) {
+                    val job=currentCoroutineContext()
+                    prepareSpeechInput(File(context.filesDir,"texts"),fullText,voice,lang) { job.ensureActive() }
+                }
+                currentCoroutineContext().ensureActive()
+                enqueued=enqueuePrepared("generate",extra!!)
+            } finally {
+                if(!enqueued)extra?.getString("textFile")?.let { textId ->
+                    val cancelled=!currentCoroutineContext().isActive
+                    withContext(NonCancellable+Dispatchers.IO) { runCatching {
+                        val owned=manager.getWorkInfosByTag("text:$textId").get(30,java.util.concurrent.TimeUnit.SECONDS)
+                        if(cancelled)owned.filter { !it.state.isFinished }.forEach { manager.cancelWorkById(it.id).result.get(30,java.util.concurrent.TimeUnit.SECONDS) }
+                        if(cancelled || owned.none { !it.state.isFinished })speechTextFile(File(context.filesDir,"texts"),textId).delete()
+                    } }
+                }
+                queued=false;preparing=null
+            }
+        }
     }
     fun acceptAndDownload() {
         if(busy)return
@@ -162,22 +189,28 @@ class StudioViewModel(application: Application): AndroidViewModel(application) {
         if(busy)return
         if(action !in setOf("download","deleteModels") && !installed) { error="Unduh model AI terlebih dahulu di Pengaturan.";return }
         stopPlayback();error=null;message=null;queued=true
+        action { try { enqueuePrepared(action,extra) } finally { queued=false } }
+    }
+    private suspend fun enqueuePrepared(action: String,extra: Data): Boolean {
         val request=OneTimeWorkRequestBuilder<CloneWorker>().setInputData(Data.Builder().putAll(extra).putString("action",action).build()).apply {
+            extra.getString("textFile")?.let { addTag("text:$it") }
             if(action=="download")setConstraints(Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build())
         }.build()
-        action {
-            try {
-                val actual=withContext(Dispatchers.IO) {
+                val parentJob=currentCoroutineContext().job
+                val actual=withContext(NonCancellable+Dispatchers.IO) {
                     manager.enqueueUniqueWork("voclone-task",ExistingWorkPolicy.KEEP,request).result.get(30,java.util.concurrent.TimeUnit.SECONDS)
                     manager.getWorkInfosForUniqueWork("voclone-task").get(30,java.util.concurrent.TimeUnit.SECONDS)
                 }
                 val target=actual.firstOrNull { !it.state.isFinished } ?: actual.firstOrNull { it.id==request.id }
                 check(target!=null) { "Tugas tidak dapat dijadwalkan. Coba kembali." }
+                if(!parentJob.isActive && target.id==request.id) {
+                    withContext(NonCancellable+Dispatchers.IO) { manager.cancelWorkById(request.id).result.get(30,java.util.concurrent.TimeUnit.SECONDS) }
+                    parentJob.ensureActive()
+                }
                 prefs.edit().putString("active",target.id.toString()).apply();active.value=target.id
-            } finally { queued=false }
-        }
+                return target.id==request.id
     }
-    fun cancel() { active.value?.let { manager.cancelWorkById(it) } }
+    fun cancel() { preparing?.cancel();active.value?.let { manager.cancelWorkById(it) } }
     fun rename(voice: VoiceProfile,name: String) {
         if(busy)return
         action { withContext(Dispatchers.IO) { TaskLease.mutex.withLock { profiles.rename(voice.id,name) } };refresh() }
@@ -223,7 +256,7 @@ class StudioViewModel(application: Application): AndroidViewModel(application) {
                     val stage=File(out.parentFile,out.name+".part")
                     try {
                         stage.delete()
-                        encodeMp3(PcmAudio.readWav(source),stage)
+                        encodeMp3(source,stage)
                         currentCoroutineContext().ensureActive()
                         check(stage.renameTo(out)) { "MP3 gagal disimpan." }
                         atomicWrite(receipt,fileSha256(out))
@@ -237,13 +270,14 @@ class StudioViewModel(application: Application): AndroidViewModel(application) {
         action {
             val file=exportFile(format)
             withContext(Dispatchers.IO) {
-                context.contentResolver.openOutputStream(uri,"wt")?.use { out -> file.inputStream().use { input -> input.copyTo(out) } } ?: error("Tujuan penyimpanan tidak dapat dibuka.")
+                context.contentResolver.openOutputStream(uri,"wt")?.use { out -> file.inputStream().use { input -> val job=currentCoroutineContext();val buffer=ByteArray(65536)
+                    while(true) { job.ensureActive();val count=input.read(buffer);if(count<0)break;out.write(buffer,0,count) } } } ?: error("Tujuan penyimpanan tidak dapat dibuka.")
             }
             message="Audio disimpan."
         }
     }
     fun checkUpdate(automatic: Boolean=false) {
-        action { if(!automatic || (updater.automatic.value && System.currentTimeMillis()-updater.state.value.lastChecked>12*60*60*1000))updater.check() }
+        action { if(!automatic || updater.automaticDue())updater.check() }
     }
     fun downloadUpdate() { action { updater.download() } }
     override fun onCleared() { recorder.stop();stopPlayback();super.onCleared() }

@@ -19,7 +19,7 @@ import tempfile
 with zipfile.ZipFile(apk) as z,tempfile.TemporaryDirectory() as temp:
  libs=[n for n in z.namelist() if n.startswith('lib/') and n.endswith('.so')]
  assert {n.split('/')[1] for n in libs}=={'arm64-v8a'},libs
- assert {pathlib.Path(n).name for n in libs}=={'libvc_omni.so','libvc_whisper.so','libvc_mp3.so','libc++_shared.so','libandroidx.graphics.path.so'}
+ assert {pathlib.Path(n).name for n in libs}=={'libvc_omni.so','libvc_omni_i8mm.so','libvc_whisper.so','libvc_mp3.so','libc++_shared.so','libandroidx.graphics.path.so'}
  assert not any(n.endswith(('.p12','.jks','.keystore','.gguf','.onnx')) for n in z.namelist())
  for name in libs:
   f=pathlib.Path(temp)/pathlib.Path(name).name;f.write_bytes(z.read(name))
