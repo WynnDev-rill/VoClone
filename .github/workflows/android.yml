@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       release:
-        description: 'Build signed alpha release (requires owner signing Secrets)'
+        description: 'Build signed alpha; accepts noncommercial QA model terms and requires owner signing Secrets'
         type: boolean
         default: false
       full_inference:
@@ -52,7 +52,7 @@ jobs:
           if-no-files-found: error
   release:
     if: startsWith(github.ref, 'refs/tags/') || (github.event_name == 'workflow_dispatch' && inputs.release)
-    needs: [validate, emulator, arm-kernels]
+    needs: [validate, emulator, arm-kernels, real-inference]
     runs-on: ubuntu-24.04
     timeout-minutes: 40
     permissions:
@@ -170,7 +170,7 @@ jobs:
           /tmp/mp3-test /tmp/long-mp3-init-test.mp3
 
   real-inference:
-    if: github.event_name == 'workflow_dispatch' && inputs.full_inference
+    if: startsWith(github.ref, 'refs/tags/') || (github.event_name == 'workflow_dispatch' && (inputs.full_inference || inputs.release))
     runs-on: ubuntu-24.04
     timeout-minutes: 90
     permissions:
