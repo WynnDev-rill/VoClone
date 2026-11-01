@@ -11,6 +11,11 @@ on:
         required: true
         default: '41314858599'
         type: string
+      validated_run:
+        description: 'Successful final APK build/UI/kernel regression run'
+        required: true
+        default: '41317679233'
+        type: string
       publish:
         description: 'Publish after all tests including real Worker inference pass'
         type: boolean
@@ -45,7 +50,7 @@ jobs:
           cp release-inputs/upgrade-real-preview.wav "$RUNNER_TEMP/upgrade-preview.wav"
           cp scripts/test-owner-upgrade.sh "$RUNNER_TEMP/test-owner-upgrade.sh"
           git checkout --detach "$SOURCE_COMMIT"
-          echo '614281cfe9e226b4d9eb5d97afd92eb31ae681fafff83ffd94cdf1a9eb916f32  '"$RUNNER_TEMP/owner-v2.apk" | sha256sum -c -
+          echo '4762f1ebe292567f1ca192d5c86f293c381ae1c6ffc7698b3fb83fe0085f16be  '"$RUNNER_TEMP/owner-v2.apk" | sha256sum -c -
           gh release download v0.1.0-alpha --repo WynnDev-rill/VoClone --pattern 'VoClone-0.1.0-alpha-arm64.apk' --dir "$RUNNER_TEMP"
           echo 'ab46b56234467c07c596518f5a386f52eb1dcab2a1771f0dff8ec8dd64853447  '"$RUNNER_TEMP/VoClone-0.1.0-alpha-arm64.apk" | sha256sum -c -
           python3 - <<'PY'
@@ -96,6 +101,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           TESTED_RUN: ${{ inputs.tested_run }}
+          VALIDATED_RUN: ${{ inputs.validated_run }}
           SOURCE_COMMIT: ${{ inputs.source_commit }}
         run: |
           python3 - <<'PY'
@@ -104,13 +110,21 @@ jobs:
           assert run['status']=='completed' and run['conclusion']=='success'
           for name in ('validate','arm-kernels','emulator','real-inference'):
               assert any(j['name']==name and j['conclusion']=='success' for j in run['jobs']),name
-          subprocess.run(['git','diff','--exit-code',run['headSha'],os.environ['SOURCE_COMMIT'],'--','app','native','scripts/build-native.sh','.github/workflows/android.yml'],check=True)
+          final=json.loads(subprocess.check_output(['gh','run','view',os.environ['VALIDATED_RUN'],'--json','status,conclusion,headSha,jobs']))
+          assert final['status']=='completed' and final['conclusion']=='success'
+          for name in ('validate','arm-kernels','emulator'):
+              assert any(j['name']==name and j['conclusion']=='success' for j in final['jobs']),name
+          subprocess.run(['git','diff','--exit-code',final['headSha'],os.environ['SOURCE_COMMIT'],'--','app','native','scripts/build-native.sh','.github/workflows/android.yml'],check=True)
+          # Real Worker pipeline code must match exactly. Only the separately regression-tested
+          # process-death staging pruner changed since the expensive real-inference run.
+          paths=subprocess.check_output(['git','diff','--name-only',run['headSha'],os.environ['SOURCE_COMMIT'],'--','app','native','scripts/build-native.sh','.github/workflows/android.yml'],text=True).splitlines()
+          assert set(paths)<=set(('app/src/main/java/id/wynn/voclone/SpeechStorage.kt','app/src/test/java/id/wynn/voclone/SpeechStorageTest.kt')),paths
           PY
           cp release-inputs/VoClone-0.2.0-alpha-arm64.apk "$RUNNER_TEMP/owner-v2.apk"
           git checkout --detach "$SOURCE_COMMIT"
           mkdir -p app/build/outputs/apk/release
           cp "$RUNNER_TEMP/owner-v2.apk" app/build/outputs/apk/release/app-release.apk
-          echo '614281cfe9e226b4d9eb5d97afd92eb31ae681fafff83ffd94cdf1a9eb916f32  app/build/outputs/apk/release/app-release.apk' | sha256sum -c -
+          echo '4762f1ebe292567f1ca192d5c86f293c381ae1c6ffc7698b3fb83fe0085f16be  app/build/outputs/apk/release/app-release.apk' | sha256sum -c -
           python3 native/fetch.py
           python3 scripts/package-release.py
           python3 scripts/publish-release.py
