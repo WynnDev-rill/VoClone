@@ -26,7 +26,7 @@ struct Utf8 {
     }
 };
 struct Control {
-    JNIEnv* owner; JavaVM* vm=nullptr; jobject value; jmethodID check; jmethodID report;
+    JNIEnv* owner; JavaVM* vm=nullptr; jobject value; jmethodID check; jmethodID report; jmethodID state;
     std::atomic<bool> failed{false};
     struct Attached {
         JavaVM* vm; JNIEnv* env=nullptr; bool detached=false;
@@ -38,14 +38,15 @@ struct Control {
         }
         ~Attached(){if(detached)vm->DetachCurrentThread();}
     };
-    Control(JNIEnv* e,jobject v):owner(e),value(nullptr),check(nullptr),report(nullptr) {
+    Control(JNIEnv* e,jobject v):owner(e),value(nullptr),check(nullptr),report(nullptr),state(nullptr) {
         if(e->ExceptionCheck()||!v){failed=true;return;}
         value=e->NewGlobalRef(v);if(!value||e->ExceptionCheck()){failed=true;return;}
         if(e->GetJavaVM(&vm)!=JNI_OK){failed=true;return;}
         auto c=e->GetObjectClass(v);if(!c||e->ExceptionCheck()){failed=true;return;}
         check=e->GetMethodID(c,"cancelled","()Z");
         if(!e->ExceptionCheck())report=e->GetMethodID(c,"progress","(F)V");
-        if(!check||!report||e->ExceptionCheck())failed=true;
+        if(!e->ExceptionCheck())state=e->GetMethodID(c,"status","(III)V");
+        if(!check||!report||!state||e->ExceptionCheck())failed=true;
         e->DeleteLocalRef(c);
     }
     ~Control(){if(value)owner->DeleteGlobalRef(value);}
@@ -70,6 +71,11 @@ struct Control {
         if(failed)return;
         Attached thread(vm);if(exception(thread.env))return;
         thread.env->CallVoidMethod(value,report,f);exception(thread.env);
+    }
+    void status(int stage,int done,int total) {
+        if(failed)return;
+        Attached thread(vm);if(exception(thread.env))return;
+        thread.env->CallVoidMethod(value,state,stage,done,total);exception(thread.env);
     }
 };
 inline void fail(JNIEnv* e) {

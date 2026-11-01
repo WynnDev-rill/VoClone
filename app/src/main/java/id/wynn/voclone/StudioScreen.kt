@@ -130,17 +130,7 @@ import java.util.Locale
                         }
                     }
                     if(vm.busy && !vm.recording && !vm.importing) item {
-                        Column(verticalArrangement=Arrangement.spacedBy(8.dp),modifier=Modifier.semantics { liveRegion=LiveRegionMode.Polite }) {
-                            val phase=vm.work?.progress?.getString("phase") ?: "Menunggu tugas dimulai…"
-                            val done=vm.work?.progress?.getLong("done",0) ?: 0
-                            val total=vm.work?.progress?.getLong("total",0) ?: 0
-                            Text(phase,style=MaterialTheme.typography.bodyMedium)
-                            if(total>0) {
-                                LinearProgressIndicator(progress={ (done.toFloat()/total).coerceIn(0f,1f) },modifier=Modifier.fillMaxWidth())
-                                Text(if(total==100L)"$done%" else "${bytes(done)} / ${bytes(total)}",style=MaterialTheme.typography.bodySmall)
-                            } else LinearProgressIndicator(Modifier.fillMaxWidth())
-                            TextButton(onClick=vm::cancel) { Text("Batalkan") }
-                        }
+                        TaskProgress(vm.work?.progress ?: androidx.work.Data.EMPTY,vm::cancel)
                     }
                     vm.error?.let { error -> item {
                         Surface(color=MaterialTheme.colorScheme.errorContainer,shape=RoundedCornerShape(12.dp)) {

@@ -21,6 +21,9 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.CancellationException
+import androidx.core.content.FileProvider
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable fun SettingsScreen(vm: StudioViewModel,modifier: Modifier=Modifier,onBack: ()->Unit,onTask: ()->Unit,onInstallUpdate: ()->Unit) {
@@ -30,6 +33,8 @@ import kotlinx.coroutines.withContext
     val update by vm.updater.state.collectAsState()
     val automatic by vm.updater.automatic.collectAsState()
     val context=LocalContext.current
+    val scope=rememberCoroutineScope()
+    var exporting by remember { mutableStateOf(false) }
     BackHandler(legal) { legal=false }
     Column(modifier.fillMaxSize()) {
         TopAppBar(title={ Text(if(legal)"Lisensi & sumber" else "Pengaturan") },navigationIcon={ IconButton(onClick={ if(legal)legal=false else onBack() }) { AppIcon(R.drawable.ic_arrow_back,"Kembali") } })
@@ -56,15 +61,8 @@ import kotlinx.coroutines.withContext
                     if(!vm.installed)Button(onClick={ onTask();vm.download() },enabled=!vm.busy,modifier=Modifier.fillMaxWidth().heightIn(min=52.dp)) { Text("Unduh / lanjutkan model") }
                     else OutlinedButton(onClick={ deleteModels=true },enabled=!vm.busy,modifier=Modifier.heightIn(min=48.dp)) { Text("Hapus model dari perangkat") }
                 }
-                if(vm.busy)item {
-                    val total=vm.work?.progress?.getLong("total",0) ?: 0
-                    val done=vm.work?.progress?.getLong("done",0) ?: 0
-                    Text(vm.work?.progress?.getString("phase") ?: "Menunggu tugas dimulai…")
-                    if(total>0) {
-                        LinearProgressIndicator(progress={ (done.toFloat()/total).coerceIn(0f,1f) },modifier=Modifier.fillMaxWidth())
-                        Text(if(total==100L)"$done%" else "${bytes(done)} / ${bytes(total)}",style=MaterialTheme.typography.bodySmall)
-                    } else LinearProgressIndicator(Modifier.fillMaxWidth())
-                    TextButton(onClick=vm::cancel) { Text("Batalkan tugas") }
+                if(vm.busy && !vm.recording && !vm.importing)item {
+                    TaskProgress(vm.work?.progress ?: androidx.work.Data.EMPTY,vm::cancel)
                 }
                 vm.error?.let { error -> item { Text(error,color=MaterialTheme.colorScheme.error,style=MaterialTheme.typography.bodyMedium) } }
                 item {
@@ -97,6 +95,20 @@ import kotlinx.coroutines.withContext
                     Spacer(Modifier.height(8.dp))
                     Text("Sampel dan profil tersimpan privat di perangkat. Android backup dinonaktifkan. Jangan hapus aplikasi sebelum menyimpan audio yang diperlukan.",style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
                     TextButton(onClick={ legal=true }) { Text("Lisensi, atribusi & ketentuan model") }
+                    TextButton(enabled=!exporting,onClick={
+                        scope.launch {
+                            exporting=true
+                            try {
+                                val file=withContext(Dispatchers.IO) { supportReport(context) }
+                                val uri=FileProvider.getUriForFile(context,"${context.packageName}.files",file)
+                                context.startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).setType("application/json")
+                                    .putExtra(Intent.EXTRA_STREAM,uri).addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION),"Bagikan laporan VoClone"))
+                            } catch(e: CancellationException) { throw e }
+                            catch(e: Exception) { vm.error="Laporan belum dapat dibagikan. Periksa ruang penyimpanan lalu coba lagi." }
+                            finally { exporting=false }
+                        }
+                    }) { Text(if(exporting)"Menyiapkan laporan…" else "Bagikan laporan diagnostik") }
+                    Text("Berisi waktu, progres dan kondisi perangkat. Tanpa audio, nama profil atau teks ucapan.",style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
                     TextButton(onClick={ context.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse("https://github.com/WynnDev-rill/VoClone"))) }) { Text("Kode sumber & catatan rilis") }
                 }
             }
