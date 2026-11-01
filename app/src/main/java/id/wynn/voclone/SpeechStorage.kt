@@ -7,14 +7,16 @@ import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 /** Preserve active/system-retry parts, reclaim terminal and abandoned preparation data. */
-fun pruneSpeechStorage(context: Context,manager: WorkManager) {
-    File(context.filesDir,"results").listFiles().orEmpty().filter { it.isDirectory && it.name.endsWith(".parts") }.forEach { dir ->
-        val uuid=runCatching { UUID.fromString(dir.name.removeSuffix(".parts")) }.getOrNull() ?: return@forEach
-        val info=manager.getWorkInfoById(uuid).get(5,TimeUnit.SECONDS)
-        if(info==null || info.state.isFinished)dir.deleteRecursively()
+fun pruneSpeechStorage(context: Context,manager: WorkManager) = pruneSpeechFiles(context.filesDir,System.currentTimeMillis(),
+    workActive={ manager.getWorkInfoById(it).get(5,TimeUnit.SECONDS)?.state?.isFinished==false },
+    textActive={ manager.getWorkInfosByTag("text:$it").get(5,TimeUnit.SECONDS).any { task -> !task.state.isFinished } })
+
+internal fun pruneSpeechFiles(filesDir: File,now: Long,workActive: (UUID)->Boolean,textActive: (String)->Boolean) {
+    File(filesDir,"results").listFiles().orEmpty().filter { it.isDirectory && it.extension=="parts" || it.isFile && it.extension=="part" }.forEach { file ->
+        val uuid=runCatching { UUID.fromString(file.nameWithoutExtension).also { require(it.toString()==file.nameWithoutExtension) } }.getOrNull() ?: return@forEach
+        if(!workActive(uuid))file.deleteRecursively()
     }
-    File(context.filesDir,"texts").listFiles().orEmpty().filter { it.extension=="txt" && System.currentTimeMillis()-it.lastModified()>86400000L }.forEach { file ->
-        val tasks=manager.getWorkInfosByTag("text:${file.nameWithoutExtension}").get(5,TimeUnit.SECONDS)
-        if(tasks.none { !it.state.isFinished })file.delete()
+    File(filesDir,"texts").listFiles().orEmpty().filter { it.extension in setOf("txt","part") && now-it.lastModified()>86400000L }.forEach { file ->
+        if(!textActive(file.nameWithoutExtension))file.delete()
     }
 }
