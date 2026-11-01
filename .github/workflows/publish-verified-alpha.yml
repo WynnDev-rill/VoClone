@@ -9,12 +9,12 @@ on:
       tested_run:
         description: 'Successful Android validation run for this application code'
         required: true
-        default: '41314858599'
+        default: '41319064053'
         type: string
       validated_run:
         description: 'Successful final APK build/UI/kernel regression run'
         required: true
-        default: '41317679233'
+        default: '41319064053'
         type: string
       publish:
         description: 'Publish after all tests including real Worker inference pass'
@@ -50,7 +50,7 @@ jobs:
           cp release-inputs/upgrade-real-preview.wav "$RUNNER_TEMP/upgrade-preview.wav"
           cp scripts/test-owner-upgrade.sh "$RUNNER_TEMP/test-owner-upgrade.sh"
           git checkout --detach "$SOURCE_COMMIT"
-          echo '4762f1ebe292567f1ca192d5c86f293c381ae1c6ffc7698b3fb83fe0085f16be  '"$RUNNER_TEMP/owner-v2.apk" | sha256sum -c -
+          echo 'bb0a3256541c3c1e8ed7d1a9813ad13a3fb5bde4e385fb77b4d58224114f50f7  '"$RUNNER_TEMP/owner-v2.apk" | sha256sum -c -
           gh release download v0.1.0-alpha --repo WynnDev-rill/VoClone --pattern 'VoClone-0.1.0-alpha-arm64.apk' --dir "$RUNNER_TEMP"
           echo 'ab46b56234467c07c596518f5a386f52eb1dcab2a1771f0dff8ec8dd64853447  '"$RUNNER_TEMP/VoClone-0.1.0-alpha-arm64.apk" | sha256sum -c -
           python3 - <<'PY'
@@ -129,7 +129,7 @@ jobs:
           git checkout --detach "$SOURCE_COMMIT"
           mkdir -p app/build/outputs/apk/release
           cp "$RUNNER_TEMP/owner-v2.apk" app/build/outputs/apk/release/app-release.apk
-          echo '4762f1ebe292567f1ca192d5c86f293c381ae1c6ffc7698b3fb83fe0085f16be  app/build/outputs/apk/release/app-release.apk' | sha256sum -c -
+          echo 'bb0a3256541c3c1e8ed7d1a9813ad13a3fb5bde4e385fb77b4d58224114f50f7  app/build/outputs/apk/release/app-release.apk' | sha256sum -c -
           python3 native/fetch.py
           python3 scripts/package-release.py
           python3 scripts/publish-release.py
