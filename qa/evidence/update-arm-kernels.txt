@@ -1,0 +1,7 @@
+GitHub Actions run 41314858599, source0641ca5, arm-kernels job124872629249; completed success. QEMU numerical checks only; no phone timing inference.
+2026-11-01T14:11:26.0770045Z PASS actual Q4_K/Q6_K matrix kernels against dequantized scalar reference (even, odd, single-column)
+2026-11-01T14:11:54.6070509Z PASS actual Q4_K/Q6_K matrix kernels against dequantized scalar reference (even, odd, single-column)
+2026-11-01T14:11:56.4176912Z PASS numeric native progress parsing and privacy boundary
+2026-11-01T14:11:56.6686780Z PASS ARM feature gate
+2026-11-01T14:11:57.5593694Z PASS long MP3 frame-count initialization; no audio synthesis claimed
+
