@@ -97,6 +97,11 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
+      - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407
+        with:
+          packages: platform-tools
+          log-accepted-android-sdk-licenses: false
+      - run: sdkmanager 'build-tools;36.0.0'
       - name: Require completed build, UI, ARM math and real inference for matching application code
         env:
           GH_TOKEN: ${{ github.token }}
@@ -129,6 +134,7 @@ jobs:
           python3 scripts/package-release.py
           python3 scripts/publish-release.py
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
         with:
           name: VoClone-owner-signed-0.2.0-alpha
           path: distribution/
