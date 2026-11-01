@@ -1,0 +1,21 @@
+// QA-only ABI overlay for a native x86_64 Android emulator. Production build files stay ARM64.
+// Same Kotlin, JNI, pinned model/runtime and Worker tests. Never permits a release task.
+gradle.beforeProject { project ->
+    project.plugins.withId('com.android.application') {
+        project.extensions.getByName('androidComponents').finalizeDsl { android ->
+            android.defaultConfig.ndk.abiFilters.clear()
+            android.defaultConfig.ndk.abiFilters.add('x86_64')
+            project.logger.lifecycle('VoClone QA ABI=x86_64; release tasks forbidden')
+        }
+        project.tasks.matching { it.name == 'nativeBuild' }.configureEach {
+            environment 'VOCLONE_ABIS', 'x86_64'
+            inputs.property('vocloneQaAbi', 'x86_64')
+            outputs.upToDateWhen { false }
+        }
+    }
+}
+gradle.taskGraph.whenReady { graph ->
+    if (graph.allTasks.any { it.name.toLowerCase(java.util.Locale.ROOT).contains('release') }) {
+        throw new GradleException('The x86 ABI overlay is only for disposable debug QA, never release.')
+    }
+}

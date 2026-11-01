@@ -171,7 +171,6 @@ jobs:
 
   real-inference:
     if: github.event_name == 'workflow_dispatch' && inputs.full_inference
-    needs: validate
     runs-on: ubuntu-24.04
     timeout-minutes: 90
     permissions:
@@ -183,10 +182,20 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
-      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+      - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407
         with:
-          name: VoClone-arm64-debug
-          path: ci-artifacts
+          packages: platform-tools
+          log-accepted-android-sdk-licenses: false
+      - uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a
+      - run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0' 'ndk;27.1.12297006' 'cmake;3.22.1'
+      - name: Build debug-only native emulator ABI with identical production pipeline
+        run: |
+          ./gradlew --no-daemon -I qa/android-x86.init.gradle assembleDebug assembleDebugAndroidTest
+          python3 - <<'PY'
+          import zipfile
+          with zipfile.ZipFile('app/build/outputs/apk/debug/app-debug.apk') as apk:
+              assert {p.split('/')[1] for p in apk.namelist() if p.startswith('lib/') and p.endswith('.so')}=={'x86_64'}
+          PY
       - run: test -e /dev/kvm && sudo chmod 666 /dev/kvm
       - name: Download consented QA models then execute actual offline Workers
         uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d
@@ -196,14 +205,17 @@ jobs:
           arch: x86_64
           profile: pixel_7
           ram-size: 4096M
-          cores: 2
+          cores: 4
           disable-animations: true
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: |
             mkdir -p qa/worker-emulator
-            adb install -r ci-artifacts/outputs/apk/debug/app-debug.apk
-            adb install -r ci-artifacts/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+            adb shell getprop ro.product.cpu.abilist > qa/worker-emulator/abi.txt
+            adb shell cat /proc/cpuinfo > qa/worker-emulator/cpuinfo.txt
+            adb install -r app/build/outputs/apk/debug/app-debug.apk
+            adb install -r app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
             adb shell am instrument -w -e class id.wynn.voclone.WorkerInferenceTest -e fullInference true -e acceptModelTerms true id.wynn.voclone.test/androidx.test.runner.AndroidJUnitRunner | tee qa/worker-emulator/instrumentation.txt
+            adb exec-out run-as id.wynn.voclone tar -cf - files/diagnostics > qa/worker-emulator/diagnostics.tar || true
             adb logcat -d -v threadtime > qa/worker-emulator/logcat.txt || true
             adb pull /sdcard/Android/data/id.wynn.voclone/files/qa qa/worker-emulator/device || true
             ! grep -E 'FAILURES!!!|INSTRUMENTATION_FAILED|INSTRUMENTATION_ABORTED|Process crashed' qa/worker-emulator/instrumentation.txt
