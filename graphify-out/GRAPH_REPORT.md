@@ -1,17 +1,17 @@
 # Graph Report - VoClone  (2026-11-01)
 
 ## Corpus Check
-- 101 files · ~61,400 words
+- 108 files · ~64,283 words
 - Verdict: corpus is large enough that graph structure adds value.
-- Unclassified: 33 file(s) not represented in the graph (top: .xml 20, (none) 4, .sha256 2)
+- Unclassified: 32 file(s) not represented in the graph (top: .xml 20, (none) 4, .sha256 2)
 
 ## Summary
-- 843 nodes · 1339 edges · 61 communities (33 shown, 28 thin omitted)
-- Extraction: 92% EXTRACTED · 8% INFERRED · 0% AMBIGUOUS · INFERRED: 112 edges (avg confidence: 0.85)
+- 802 nodes · 1312 edges · 61 communities (38 shown, 23 thin omitted)
+- Extraction: 91% EXTRACTED · 9% INFERRED · 0% AMBIGUOUS · INFERRED: 112 edges (avg confidence: 0.85)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `164782b5`
+- Built from commit: `0f72acd5`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -29,12 +29,11 @@
 - env
 - UI_AUDIT.md
 - NativeControl
-- emulator
+- jobs
 - speechChunks
 - uuid
 - progress.h
 - VoClone performance and observable inference implementation plan
-- jobs
 - TaskProgress.kt
 - real-inference
 - 2026-10-31-performance-ledger.md
@@ -42,16 +41,17 @@
 - test-arm-kernels.sh
 - StudioScreen
 - AppIcon
-- with
-- Events
-- tested_run
-- MainActivity.kt
-- DeviceTest.kt
-- encodeMp3
-- WorkerInferenceTest.kt
+- host_progress.cpp
+- README.md
+- Verifikasi VoClone — 30 Oktober 2026
+- Arsitektur VoClone
 - test-owner-upgrade.sh
+- Build yang dapat direproduksi
+- POCO F6 / Android 16 / ARM64 acceptance
+- VERIFICATION.md
+- THIRD_PARTY_NOTICES.md
 - Models.kt
-- AndroidAudio.kt
+- MainActivity.kt
 - AppUpdater.kt
 - .copy
 - PcmAudio
@@ -61,8 +61,8 @@
 - Design System Master File
 - Mp3Encoder.c
 - VoClone
-- quant_selftest.h
-- README.md
+- VC_JNI
+- VoClone engineering instructions
 - OmniVoice GGUF
 - OmniVoice GGUF
 - build-native.sh
@@ -73,13 +73,13 @@
 1. `PcmAudio` - 25 edges
 2. `with` - 20 edges
 3. `Control` - 19 edges
-4. `with` - 18 edges
-5. `UpdateManifestTest` - 16 edges
-6. `check()` - 13 edges
-7. `ProfileStore` - 13 edges
-8. `NativeControl` - 11 edges
-9. `StreamingWavWriter` - 11 edges
-10. `StudioScreen()` - 11 edges
+4. `UpdateManifestTest` - 16 edges
+5. `check()` - 13 edges
+6. `ProfileStore` - 13 edges
+7. `NativeControl` - 11 edges
+8. `StreamingWavWriter` - 11 edges
+9. `StudioScreen()` - 11 edges
+10. `InferenceProgress` - 10 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `Kepemilikan pekerjaan` --references--> `TaskLease`  [INFERRED]
@@ -96,7 +96,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (61 total, 28 thin omitted)
+## Communities (61 total, 23 thin omitted)
 
 ### Community 0 - "release"
 Cohesion: 0.13
@@ -107,7 +107,7 @@ Cohesion: 0.09
 Nodes (4): ProgressUiTest, cloneInput(), VoCloneTheme(), SpeechRequestTest
 
 ### Community 2 - "host_api.cpp"
-Cohesion: 0.21
+Cohesion: 0.31
 Nodes (3): main(), read(), wav()
 
 ### Community 3 - "with"
@@ -130,9 +130,13 @@ Nodes (5): concurrency, cancel-in-progress, group, name, permissions
 Cohesion: 0.33
 Nodes (6): release, if, needs, permissions, runs-on, timeout-minutes
 
+### Community 8 - "host_test.py"
+Cohesion: 0.08
+Nodes (6): fetch_sources(), patch(), main(), next_feed(), verify_public(), FeedTest
+
 ### Community 9 - "steps"
-Cohesion: 0.50
-Nodes (9): steps, steps, steps, steps, if, name, run, uses (+1 more)
+Cohesion: 0.32
+Nodes (12): steps, steps, validate, steps, steps, if, name, run (+4 more)
 
 ### Community 10 - "env"
 Cohesion: 0.33
@@ -142,12 +146,12 @@ Nodes (6): GH_TOKEN, KEYSTORE_BASE64, VOCLONE_KEY_ALIAS, VOCLONE_KEY_PASSWORD, V
 Cohesion: 0.13
 Nodes (6): CpuChoice, CpuRuntime, FastNativeBridge, NativeBridge, NativeControl, VoiceEngine
 
-### Community 15 - "emulator"
-Cohesion: 0.29
-Nodes (8): needs, permissions, runs-on, timeout-minutes, emulator, actions, contents, permissions
+### Community 15 - "jobs"
+Cohesion: 0.25
+Nodes (8): runs-on, timeout-minutes, needs, runs-on, timeout-minutes, jobs, arm-kernels, emulator
 
 ### Community 17 - "uuid"
-Cohesion: 0.17
+Cohesion: 0.16
 Nodes (6): prepareSpeechInput(), speechTextFile(), pruneSpeechFiles(), pruneSpeechStorage(), SpeechInputTest, SpeechStorageTest
 
 ### Community 20 - "progress.h"
@@ -158,48 +162,64 @@ Nodes (5): parse_progress(), Progress, done, stage, total
 Cohesion: 0.25
 Nodes (7): Constraints, Review focus, Task1: bounded preview request (red/green), Task2: real native progress and local diagnostics (red/green), Task3: guarded ARM kernel variant, Task4: verification, update and distribution, VoClone performance and observable inference implementation plan
 
-### Community 22 - "jobs"
-Cohesion: 0.29
-Nodes (7): runs-on, timeout-minutes, jobs, arm-kernels, validate, runs-on, timeout-minutes
-
 ### Community 24 - "real-inference"
-Cohesion: 0.40
-Nodes (5): real-inference, if, needs, runs-on, timeout-minutes
+Cohesion: 0.29
+Nodes (8): permissions, real-inference, actions, contents, if, permissions, runs-on, timeout-minutes
 
 ### Community 28 - "StudioScreen"
 Cohesion: 0.44
 Nodes (5): AudioPlayer(), ButtonIcon(), RecordButton(), StudioScreen(), VoiceRow()
 
-### Community 30 - "with"
-Cohesion: 0.05
-Nodes (42): GH_TOKEN, SOURCE_COMMIT, TESTED_RUN, VOCLONE_SOURCE_ROOT, jobs, publish, upgrade, name (+34 more)
-
-### Community 31 - "Events"
-Cohesion: 0.50
+### Community 31 - "host_progress.cpp"
+Cohesion: 0.20
 Nodes (4): Events, decoded, reference, steps
 
-### Community 32 - "tested_run"
-Cohesion: 0.12
-Nodes (16): publish, source_commit, tested_run, on, workflow_dispatch, default, description, type (+8 more)
+### Community 32 - "README.md"
+Cohesion: 0.20
+Nodes (7): Keputusan engine, Konflik lisensi yang benar-benar ditemukan, Riset Asset-First — 30 Oktober 2026, Standar pengalaman pengguna, Perbarui graph, Skill dan tooling proyek, VoClone
+
+### Community 33 - "Verifikasi VoClone — 30 Oktober 2026"
+Cohesion: 0.25
+Nodes (8): Belum terbukti / batasan, Bukti yang sudah tersedia, Distribusi alpha yang tersedia, Final artifact provenance and publication, Final real Android pipeline evidence, GitHub Actions, Ukuran dan identitas yang dipatok, Verifikasi VoClone — 30 Oktober 2026
+
+### Community 36 - "Arsitektur VoClone"
+Cohesion: 0.29
+Nodes (6): TaskLease, Arsitektur VoClone, Audio, Kepemilikan pekerjaan, Penyimpanan dan privasi, Updater
+
+### Community 39 - "Build yang dapat direproduksi"
+Cohesion: 0.29
+Nodes (6): Build yang dapat direproduksi, Environment-specific failures seen, GitHub Actions / Secrets, Owner release signing, Public feed and feed-only recovery, Published owner alpha
+
+### Community 41 - "POCO F6 / Android 16 / ARM64 acceptance"
+Cohesion: 0.50
+Nodes (3): Instrumentation commands, POCO F6 / Android 16 / ARM64 acceptance, Update 0.2 regression cases
+
+### Community 42 - "VERIFICATION.md"
+Cohesion: 0.25
+Nodes (6): Real progress and CPU execution, Update distribution and security, Verification and reproduction, VoClone 0.2.0-alpha, Published 0.2.0-alpha — final artifact, Update 0.2.0-alpha — 1 November 2026
 
 ### Community 45 - "Models.kt"
 Cohesion: 0.19
 Nodes (5): ModelAsset, ModelCatalog, sha256(), VerifiedDownload, ModelStoreTest
 
+### Community 67 - "MainActivity.kt"
+Cohesion: 0.07
+Nodes (7): DeviceTest, AndroidAudio, encodeMp3(), NativeMp3Bridge, VoiceRecorder, MainActivity, fileSha256()
+
 ### Community 74 - "AppUpdater.kt"
-Cohesion: 0.08
-Nodes (11): inference(), privateReference(), publish(), report(), TaskLease, VoCloneApp, Arsitektur VoClone, Audio (+3 more)
+Cohesion: 0.07
+Nodes (6): WorkerInferenceTest, inference(), privateReference(), publish(), report(), VoCloneApp
 
 ### Community 82 - "PcmAudio"
 Cohesion: 0.07
 Nodes (11): check(), PcmAudio, ProfileStore, VoiceProfile, forEachWaveBlock(), StreamingWavWriter, WaveInfo, WaveSummary (+3 more)
 
 ### Community 83 - "Control"
-Cohesion: 0.06
-Nodes (20): Attached, detached, env, vm, Control, check, failed, owner (+12 more)
+Cohesion: 0.07
+Nodes (18): Attached, detached, env, vm, Control, check, failed, owner (+10 more)
 
 ### Community 89 - "UpdateManifestTest"
-Cohesion: 0.17
+Cohesion: 0.16
 Nodes (3): State, UpdateManifest, UpdateManifestTest
 
 ### Community 94 - "Design System Master File"
@@ -214,13 +234,13 @@ Nodes (11): VSMp3, Java_id_wynn_voclone_NativeMp3Bridge_close(), Java_id_wynn_vo
 Cohesion: 0.18
 Nodes (10): Accessibility & Inclusion, Brand Commitments, Capabilities and Constraints, Evidence on Hand, Platform, Product Principles, Product Purpose, Stack (+2 more)
 
-### Community 180 - "quant_selftest.h"
-Cohesion: 0.20
-Nodes (3): quant_matmul_case(), quant_matmul_selftest(), main()
+### Community 180 - "VC_JNI"
+Cohesion: 0.22
+Nodes (5): Java_id_wynn_voclone_NativeBridge_hasI8mm(), VC_JNI(), quant_matmul_case(), quant_matmul_selftest(), main()
 
-### Community 192 - "README.md"
-Cohesion: 0.05
-Nodes (35): Build and debug, Goal and architecture, graphify, Safety, licensing and completion, v0.2 contracts, VoClone engineering instructions, Workflow, Build yang dapat direproduksi (+27 more)
+### Community 192 - "VoClone engineering instructions"
+Cohesion: 0.25
+Nodes (7): Build and debug, Goal and architecture, graphify, Safety, licensing and completion, v0.2 contracts, VoClone engineering instructions, Workflow
 
 ### Community 204 - "OmniVoice GGUF"
 Cohesion: 0.29
@@ -232,12 +252,14 @@ Nodes (6): Backends, Files, License, OmniVoice GGUF, Quantization policy, Quick 
 
 ## Knowledge Gaps
 - **21 isolated node(s):** `storage`, `chars`, `owner`, `vm`, `value` (+16 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 342 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **28 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 312 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **23 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
+- **Why does `TaskLease` connect `Arsitektur VoClone` to `AppUpdater.kt`?**
+  _High betweenness centrality (0.097) - this node is a cross-community bridge._
 - **Are the 11 inferred relationships involving `PcmAudio` (e.g. with `.decodesRealWavAndEncodedMp3()` and `.rejectsNonFiniteOutput()`) actually correct?**
   _`PcmAudio` has 11 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `storage`, `chars`, `owner` to the rest of the system?**
@@ -250,5 +272,3 @@ _Questions this graph is uniquely positioned to answer:_
   _Cohesion score 0.11764705882352941 - nodes in this community are weakly interconnected._
 - **Should `Diagnostics.kt` be split into smaller, more focused modules?**
   _Cohesion score 0.1111111111111111 - nodes in this community are weakly interconnected._
-- **Should `host_test.py` be split into smaller, more focused modules?**
-  _Cohesion score 0.1028225806451613 - nodes in this community are weakly interconnected._

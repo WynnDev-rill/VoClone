@@ -14,6 +14,8 @@ Impor MP3/WAV atau rekam -> validasi/resample -> transkrip Whisper yang bisa dik
 - [Graph interaktif](graphify-out/graph.html), [JSON](graphify-out/graph.json), [laporan graph](graphify-out/GRAPH_REPORT.md)
 - [Instruksi AI berikutnya](AGENTS.md)
 
-[Unduh APK owner alpha dan corresponding source](https://github.com/WynnDev-rill/VoClone/releases/tag/v0.1.0-alpha). APK debug dan bukti Android16 di [workflow **Android APK** yang lulus](https://github.com/WynnDev-rill/VoClone/actions/runs/41107870881). Owner release menggunakan kunci asli yang fingerprint publiknya tersimpan di docs/signing-sha256.txt; private key hanya dalam backup pemilik/Secrets, tidak pernah di repository. Tidak ada jaminan memori lintas sesi AI: AGENTS.md, dokumentasi dan backup privat adalah handoff yang persisten.
+[Unduh APK owner alpha dan corresponding source](https://github.com/WynnDev-rill/VoClone/releases/tag/v0.2.0-alpha). APK debug dan bukti Android16 di [workflow **Android APK** yang lulus](https://github.com/WynnDev-rill/VoClone/actions/runs/41319064053). Owner release menggunakan kunci asli yang fingerprint publiknya tersimpan di docs/signing-sha256.txt; private key hanya dalam backup pemilik/Secrets, tidak pernah di repository. Tidak ada jaminan memori lintas sesi AI: AGENTS.md, dokumentasi dan backup privat adalah handoff yang persisten.
+
+v0.2 menghapus batas total600karakter melalui bagian teks yang dibatasi untuk native, menyediakan progres iterasi nyata, pratinjau singkat, kernel ARM terpilih dan diagnostik privat. [Rincian pembaruan](docs/UPDATE_0.2.md). v0.1 perlu dipasang manual sekali ke v0.2 dengan signer asli; rilis berikutnya diperiksa dari feed publik VoClone, tanpa Wynn-Store.
 
 AGPL-3.0; atribusi VoiceStudio dan semua lisensi komponen dipertahankan. Gunakan suara yang dimiliki atau dengan izin pemiliknya.

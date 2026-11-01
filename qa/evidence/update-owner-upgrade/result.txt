@@ -1,0 +1,1 @@
+PASS original-owner v1 -> v2 install -r, actual UI profile visible in both versions, profile/reference/real preview/storage-sentinel SHA preserved, preferences retained. Disposable rooted emulator; not physical hardware or a real model download test.

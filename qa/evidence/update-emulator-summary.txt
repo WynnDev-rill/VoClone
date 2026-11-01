@@ -1,0 +1,20 @@
+Actions41314858599/source0641ca5, emulator job124873410238 completed success. Default7 JUnit cases:5executed,2full-inference cases assumption-skipped. NarrowUI case1executed. No realAI claim from UI fixtures.
+adb pull /sdcard/Android/data/id.wynn.voclone/files/qa qa/emulator/device || true
+adb pull /sdcard/Android/data/id.wynn.voclone/files/qa qa/emulator/device || true
+2026-11-01T14:13:41.0210566Z adb pull /sdcard/Android/data/id.wynn.voclone/files/qa qa/emulator/device || true
+2026-11-01T14:13:41.0215065Z adb pull /sdcard/Android/data/id.wynn.voclone/files/qa qa/emulator/device || true
+2026-11-01T14:15:52.4899546Z id.wynn.voclone.DeviceTest:
+2026-11-01T14:16:01.5915205Z id.wynn.voclone.DeviceTest:..
+2026-11-01T14:16:10.6561902Z id.wynn.voclone.ProgressUiTest:..
+2026-11-01T14:16:18.4353457Z id.wynn.voclone.StudioUiTest:.
+2026-11-01T14:16:18.4389133Z id.wynn.voclone.WorkerInferenceTest:
+2026-11-01T14:16:18.4509111Z id.wynn.voclone.WorkerInferenceTest:
+2026-11-01T14:16:18.4513115Z Time: 25.96
+2026-11-01T14:16:18.4513701Z OK (7 tests)
+2026-11-01T14:16:19.3131607Z /sdcard/Android/data/id.wynn.voclone/files/qa/: 5 files pulled, 0 skipped. 28.7 MB/s (874099 bytes in 0.029s)
+2026-11-01T14:16:19.3248504Z OK (7 tests)
+2026-11-01T14:16:35.8485048Z id.wynn.voclone.StudioUiTest:.
+2026-11-01T14:16:35.8488282Z Time: 10.025
+2026-11-01T14:16:35.8491182Z OK (1 test)
+2026-11-01T14:16:36.6195415Z /sdcard/Android/data/id.wynn.voclone/files/qa/: 10 files pulled, 0 skipped. 75.7 MB/s (1665058 bytes in 0.021s)
+2026-11-01T14:16:36.6314951Z OK (1 test)

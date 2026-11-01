@@ -1,0 +1,1 @@
+PASS actual Whisper -> short clone preview -> persistent voice -> generated WAV; airplane mode enabled before inference; Home pressed during real Workers. Emulator is not a physical-device benchmark.

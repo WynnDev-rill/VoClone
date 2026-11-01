@@ -1,0 +1,35 @@
+{
+  "taskId": "660bf2e8-e78c-4ca0-a73f-cd47472927e3",
+  "action": "generate",
+  "status": "succeeded",
+  "snapshot": {
+    "stage": 5,
+    "done": 0,
+    "total": 0,
+    "chunk": 1,
+    "elapsedMs": 318562,
+    "sinceProgressMs": 134,
+    "stageMs": {
+      "6": 2678,
+      "1": 480,
+      "2": 14467,
+      "3": 297169,
+      "4": 3634,
+      "5": 134
+    },
+    "backend": "generic:capability-or-native-abi"
+  },
+  "updatedAtEpochMs": 1793546358394,
+  "referenceMs": 3200,
+  "textCodepoints": 6,
+  "appVersion": "0.2.0-alpha",
+  "language": "en",
+  "attempt": 0,
+  "pssKb": 109452,
+  "javaHeapBytes": 8173456,
+  "thermalStatus": 0,
+  "stopReason": -256,
+  "failureType": null,
+  "peakObservedPssKb": 898200,
+  "reusedOutput": false
+}

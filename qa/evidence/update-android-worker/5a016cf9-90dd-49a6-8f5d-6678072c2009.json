@@ -1,0 +1,31 @@
+{
+  "taskId": "5a016cf9-90dd-49a6-8f5d-6678072c2009",
+  "action": "transcribe",
+  "status": "succeeded",
+  "snapshot": {
+    "stage": 0,
+    "done": 100,
+    "total": 100,
+    "chunk": 0,
+    "elapsedMs": 14052,
+    "sinceProgressMs": 32,
+    "stageMs": {
+      "6": 9175,
+      "0": 4877
+    },
+    "backend": "unselected"
+  },
+  "updatedAtEpochMs": 1793545674941,
+  "referenceMs": 3200,
+  "textCodepoints": 0,
+  "appVersion": "0.2.0-alpha",
+  "language": "none",
+  "attempt": 0,
+  "pssKb": 108964,
+  "javaHeapBytes": 9942944,
+  "thermalStatus": 0,
+  "stopReason": -256,
+  "failureType": null,
+  "peakObservedPssKb": 234740,
+  "reusedOutput": false
+}
